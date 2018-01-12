@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Product
  *
  * @ORM\Table(name="product")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\IntranetRepository")
+ * @ORM\Entity
  */
 class Product
 {
@@ -24,21 +24,21 @@ class Product
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=150, nullable=false, unique=false)
+     * @ORM\Column(name="name", type="string", length=150, precision=0, scale=0, nullable=false, unique=false)
      */
     private $name;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="sku", type="string", length=70, nullable=false, unique=true)
+     * @ORM\Column(name="sku", type="string", length=70, precision=0, scale=0, nullable=false, unique=true)
      */
     private $sku;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="sku_provider", type="string", length=70, nullable=false, unique=true)
+     * @ORM\Column(name="sku_provider", type="string", length=70, precision=0, scale=0, nullable=false, unique=true)
      */
     private $sku_provider;
 
@@ -55,6 +55,16 @@ class Product
      * @ORM\Column(name="pvp", type="decimal", precision=10, scale=2, nullable=false, unique=false)
      */
     private $pvp;
+
+    /**
+     * @var \AppBundle\Entity\Stock
+     *
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Stock", inversedBy="product")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="stock_id", referencedColumnName="id", unique=true)
+     * })
+     */
+    private $stock;
 
 
     /**
@@ -185,6 +195,30 @@ class Product
     public function getPvp()
     {
         return $this->pvp;
+    }
+
+    /**
+     * Set stock
+     *
+     * @param \AppBundle\Entity\Stock $stock
+     *
+     * @return Product
+     */
+    public function setStock(\AppBundle\Entity\Stock $stock = null)
+    {
+        $this->stock = $stock;
+
+        return $this;
+    }
+
+    /**
+     * Get stock
+     *
+     * @return \AppBundle\Entity\Stock
+     */
+    public function getStock()
+    {
+        return $this->stock;
     }
 }
 
