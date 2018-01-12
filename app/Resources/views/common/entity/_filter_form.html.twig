@@ -1,0 +1,22 @@
+{% form_theme filterForm 'form/filterFields.html.twig' %}
+{{ form_start(filterForm, {'attr': {'class': 'form-horizontal'} }) }}
+
+<div class="form-body">
+
+  {{ form_errors(filterForm) }}
+  
+  {% include [base_template_url~'/filter_form_fields.html.twig', 'common/entity/_filter_form_fields.html.twig'] %}
+
+  {{ form_rest(filterForm) }}
+
+  <div class="form-actions">
+    <div class="row">
+      <div class="col-md-offset-3 col-md-9">
+        <input type="submit" onclick="changeFormPaginationAction($(this).closest('form'), undefined, 1);" class="btn green submitButton" value="Filter"/>
+        <input type="submit" onclick="changeFormPaginationAction($(this).closest('form'), undefined, 1);" class="btn green submitButton" name="reset_filter" value="Reset filter"/>
+      </div>
+    </div>
+  </div>
+</div>
+
+{{ form_end(filterForm) }}

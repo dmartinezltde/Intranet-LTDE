@@ -1,0 +1,19 @@
+{% extends base_template_url~'/entityBase.html.twig' %}
+
+{% if selectorMultiple is not defined %}
+  {% set selectorMultiple = "undefined" %}
+{% endif %}
+
+{%  set javascripts = [
+
+    'jQuery(document).ready(function() { 
+            genericSelector("'~selectorInputId~'", "'~selectorInputName~'", "'~selectorActionUrl~'", "'~selectorMultiple~'")})' 
+            
+    ] 
+%} 
+
+{% block content %}
+
+  {% include [base_template_url~'/selector.html.twig', 'common/entity/_selector.html.twig'] %}
+
+{% endblock %}

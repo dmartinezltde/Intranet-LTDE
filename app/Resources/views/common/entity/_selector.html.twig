@@ -1,0 +1,16 @@
+{% if selectorMultiple is not defined %}
+  {% set selectorMultiple = "undefined" %}
+{% endif %}
+
+{% set javascripts = javascripts|merge([
+      
+      "$(document).ready(function() { 
+          genericSelector('"~selectorInputId~"', '"~selectorInputName~"', '"~selectorActionUrl~"',  '"~selectorMultiple~"'); });"
+      
+    ]) %}
+
+
+{% include 'common/page/page_base.html.twig' with {"title": "List of available "~base_instances_name,
+                                                   "subtitle": "",
+                                                   "javascripts": javascripts,
+                                                   "portlets": portlets} %}

@@ -1,0 +1,58 @@
+{% if editable is not defined %}
+  {% set editable = false %}
+{% endif %}
+
+{% if create_new_row is not defined %}
+  {% set create_new_row = false %}
+{% endif %}
+
+{% if new_form is not defined %}
+  {% set new_form = null %}
+{% endif %}
+
+{% if actions is not defined %}
+  {% set actions = {} %}
+{% endif %}
+
+{% if update_form is not defined %}
+  {% set update_form = null %}
+{% endif %}
+
+{% if expandible_table is not defined %}
+  {% set expandible_table = null %}
+{% endif %}
+
+{% if expandible_row_path is not defined %}
+  {% set expandible_row_path = null %}
+{% endif %}
+
+{% if expandible_row_key is not defined %}
+  {% set expandible_row_key = null %}
+{% endif %}
+
+{% if actions.select is defined and selector_base_table_columns is defined %}
+  {% set base_table_columns = selector_base_table_columns %}
+  {% set expandible_table = null %}
+{% endif %}
+
+{% include 'common/table/editable_table.html.twig' with {
+
+  'editable':                editable,
+  'create_new_row':          create_new_row,
+  'new_form':                new_form,
+  'actions':                 actions,
+  'update_form':             update_form,
+  
+  'expandible_table':        expandible_table,
+  'expandible_row_path':     expandible_row_path,
+  'expandible_row_key':      expandible_row_key,
+	
+	'columns':                 base_table_columns,
+	'editable_columns':        base_editable_columns,
+	'batch_editable_columns':  base_batch_editable_columns,
+	'urlprefix':			         base_url_prefix,
+	'instance_name':           base_instance_name,
+	'instances_name':          base_instances_name,
+
+
+  } %}

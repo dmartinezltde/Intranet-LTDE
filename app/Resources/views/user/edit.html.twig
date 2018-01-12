@@ -1,0 +1,74 @@
+{% extends 'layout.html.twig' %}
+
+{% block page_head %}
+  {% include '_page_head.html.twig' with {
+    'page_head_title': 'Edición de usuario',
+    'page_head_subtitle': 'Administra la información del usuario'
+  } %}
+{% endblock %}
+
+{% block content %}
+  {% include 'common/breadcrumb.html.twig' with {
+    'links': { 'Inicio': path('homepage'), 'Usuarios': path('user_list') },
+    'active': (id == 0 ? 'Nuevo usuario': 'Editar') }
+  %}
+
+  <div class="page-content-inner">
+
+    {% include 'common/feedback.html.twig' %}
+
+    <div class="row">
+      <div class="col-md-12">
+        <div class="portlet light ">
+          <div class="portlet-title">
+            <div class="caption font-dark">
+              <i class="icon-users font-dark"></i>
+              <span class="caption-subject bold uppercase"> Crear / Editar Usuario</span>
+            </div>
+          </div>
+          <div class="portlet-body form">
+            {% form_theme form 'form/filterFields.html.twig' %}
+            {{ form_start(form, {'attr': {'id': 'editForm', 'class': 'form-horizontal', 'novalidate': 'novalidate', 'action': path('user_edit', { 'id': id })} }) }}
+            <div class="form-body">
+              {{ form_widget(form) }}
+            </div>
+            <div class="form-actions modal-footer">
+              <div class="row">
+                <div class="col-md-offset-3 col-md-9">
+                  <button type="submit" id="submit" class="btn green">Guardar</button>
+                  <a href="{{ path('user_list') }}" class="btn default">Cancelar</a>
+                </div>
+              </div>
+            </div>
+            {{ form_end(form) }}
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block page_scripts %}
+  <script src="{{ asset('assets/global/plugins/tinymce/tinymce.min.js') }}" type="text/javascript"></script>
+  <script type="text/javascript">
+    /* <![CDATA[ */
+    jQuery(document).ready(function () {
+      tinymce.init({
+        mode: "textareas",
+        theme: "modern",
+        selector: "#user_signature"
+      });
+    });
+
+    $('#user_responsible').on('click', function(){
+        if($(this).is(':checked')) {
+            var confirmed = confirm('This user will be set as the default responsible for new contracts. \n\
+            This action will overwrite the previous user that was set as responsible');
+            if(confirmed != true) {
+                $('#user_responsible').attr('checked', false);
+            }
+        }
+    });
+    /* ]]> */
+</script>
+{% endblock %}

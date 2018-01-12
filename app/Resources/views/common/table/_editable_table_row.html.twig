@@ -1,0 +1,116 @@
+{% set added_actions_column = false %}
+
+{% for column in columns|keys %}
+
+  {% if column in base_table_attribute_arguments|keys %}
+    {% set attr_args = base_table_attribute_arguments[column] %}
+    
+    {# Check if the arguments must be change for the id of the instance #}
+    {% for col in attr_args|keys %}
+      {% if attr_args[col]=="XXX" %}
+        {% set t = attr_args %}
+        {% set t = t|merge({(col): i}) %}
+        {% set attr_args = t %}
+      {% endif %}
+    {% endfor %}
+    {# End check #}
+    
+  {% else %}
+    {% set attr_args = {} %}
+  {% endif %}
+
+  {% if editable is not defined or not editable or column not in editable_columns|keys %}
+    
+    {% if base_table_rowspan is not defined or column not in base_table_rowspan|keys %}
+      <td rowspan="{{ instance_rowspan }}" class="{%if add_cell_column_class is defined and add_cell_column_class%}{{column}}{%endif%} {{ classes }}">
+        {% if instance_attributes_link is not defined or column not in instance_attributes_link %}
+          
+          {# For the moment, nested attributes are only possible at this level #}
+          {% set subfields = column|split(".") %}
+          
+          {% if subfields|length > 1 %}
+            
+            {% set idata = i %}
+            
+            {% for ifield in subfields %}
+              {% set idata = attribute(idata, ifield) %}
+            {% endfor %}
+            
+            {# use the default createLink or other specific link #}
+            {% if base_table_column_link_provider_function is not defined or column not in base_table_column_link_provider_function|keys %}
+              {{ linkProvider.createLink(idata)|raw }}
+            {% else %}
+              {{ attribute(linkProvider, 
+                           base_table_column_link_provider_function[column], 
+                           [idata])|raw }}
+            {% endif %}
+            
+          {% else %}
+            {# use the default createLink or other specific link #}
+            {% if base_table_column_link_provider_function is not defined or column not in base_table_column_link_provider_function|keys %}
+              {{ linkProvider.createLink(attribute(i, column, attr_args))|raw }}
+            {% else %}
+              {{ attribute(linkProvider, 
+                           base_table_column_link_provider_function[column], 
+                           [i])|raw }}
+            {% endif %}
+          {% endif %}
+
+        {% else %}
+          {{ linkProvider.createLink(attribute(i, column, attr_args), i)|raw }}
+        {% endif %}
+      </td>
+    
+    {% else %}
+      {% set inner_instance_index = 0 %}
+      {% set inner_instances = attribute(i, column, attr_args) %}
+
+      {% if inner_instances|length == 0 %}
+        <td colspan="{{ base_table_rowspan[column]|length }}" class="{{ classes }}">
+          <span class="label label-warning">There are no elements here.</span>
+        </td>
+      {% endif %}
+
+      {% for inner_instance in inner_instances %}
+      
+        {% for inner_column in base_table_rowspan[column]|keys %}
+        
+          {% if inner_column in base_table_attribute_arguments|keys %}
+            {% set inner_attr_args = base_table_attribute_arguments[inner_column] %}
+          {% else %}
+            {% set inner_attr_args = {} %}
+          {% endif %}
+        
+          <td class="{%if add_cell_column_class is defined and add_cell_column_class%}{{column}}{%endif%} {{ classes }}">
+          
+            {{ linkProvider.createLink(attribute(inner_instance, inner_column, inner_attr_args))|raw }}
+            
+          </td>
+        {% endfor %}
+        
+        {% if inner_instance_index == 0 %}
+          {% include('common/table/_editable_table_actions_column.html.twig') %}
+          {% set added_actions_column = true %}
+        {% endif %}
+        
+        {% set inner_instance_index = inner_instance_index + 1 %}
+        </tr>
+        
+      {% endfor %}
+    
+    
+    {% endif %}
+    
+  {% else %}
+    <td rowspan="{{ instance_rowspan }}" class="{%if add_cell_column_class is defined and add_cell_column_class%}{{column}}{%endif%}">
+      {{ form_widget(update_form.instances[i.id][editable_columns[column]]) }}
+      {{ form_errors(update_form.instances[i.id][editable_columns[column]]) }}
+    </td>
+  {% endif %}
+{% endfor %}
+
+
+{% if added_actions_column == false %}
+  {% include('common/table/_editable_table_actions_column.html.twig') %}
+  </tr>
+{% endif %}

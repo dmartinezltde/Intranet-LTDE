@@ -1,0 +1,47 @@
+{% if errors|length > 0 or warnings|length > 0 %}
+  <script src="{{ asset('assets/global/plugins/jquery-notific8/jquery.notific8.min.js') }}" type="text/javascript"></script>
+  <script type="text/javascript">
+    /* <![CDATA[ */
+    jQuery(document).ready(function () {
+
+      {% for e_id, error in errors %}
+        $.notific8('{{ error }} <input type="hidden" class="msgId" value="{{ e_id }}"/>', {
+          sticky: true,
+          theme: 'tkerror'
+        });
+      {% endfor %}
+
+      {% for w_id, warning in warnings %}
+        $.notific8('{{ warning }} <input type="hidden" class="msgId" value="{{ w_id }}"/>', {
+          sticky: true,
+          theme: 'tkwarning'
+        });
+      {% endfor %}
+
+      /* Event for the close links */
+      $('.jquery-notific8-close-sticky').on('click', function(e){
+        //Get the notification ID from the input hidden field to remove it from the session
+        var parentDiv = $(this).parent();
+        var msgId = parentDiv.find('input.msgId').val();
+
+        var urlcall = '{{ path('notification_sticker_remove', {'type': 'YY', 'id': 'XX'}) }}';
+        var type = '';
+        if (parentDiv.hasClass('tkwarning')) {
+          type = 'period_publish_warnings';
+        } else if (parentDiv.hasClass('tkerror')) {
+          type = 'period_publish_errors';
+        }
+
+        if (type != '') {
+          //call an ajax function to remove from the session the message that matches the ID
+          urlcall = urlcall.replace('XX', msgId).replace('YY', type);
+          $.ajax({
+            url: urlcall
+          });
+        }
+      });
+
+    });
+    /* ]]> */
+  </script>
+{% endif %}

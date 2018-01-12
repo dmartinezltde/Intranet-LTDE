@@ -1,0 +1,9 @@
+{% extends 'layout.html.twig' %}
+
+{% block page_head %}
+  {% include '_page_head.html.twig' with { 'page_head_title': 'Dashboard' } %}
+{% endblock %}
+
+{% block content %}
+  <h2>Bienvenido {{ app.user.username }}</h2>
+{% endblock %}

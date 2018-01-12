@@ -1,0 +1,10 @@
+{% include 'common/page/portlet.html.twig' with {
+    "title":            title is defined and title !=null ? title : (instance != null and instance.id == 0 ? "Crear nuevo "~base_instance_name: "Editar "~base_instance_name),
+    "subtitle":         subtitle is defined ? subtitle : '',
+	
+    "cancel_path":      cancel_path is defined ? cancel_path : '',
+
+	  "portlet_actions":  portlet_actions is defined ? portlet_actions : [],
+
+    "content":          content}
+%}

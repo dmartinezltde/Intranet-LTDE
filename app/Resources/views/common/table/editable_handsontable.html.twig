@@ -1,0 +1,226 @@
+<link href="{{ asset('assets/global/plugins/handsontable/dist/handsontable.full.css') }}" rel="stylesheet" type="text/css" />
+
+<!-- Necessary for the date field -->
+<link href="{{ asset('assets/global/plugins/handsontable/dist/pikaday/pikaday.css') }}" rel="stylesheet" type="text/css" />
+
+<!-- Custom tk css added -->
+<link href="{{ asset('assets/css/handsontable.css') }}" rel="stylesheet" type="text/css" />
+
+<script src="/assets/global/plugins/handsontable/dist/handsontable.full.js" type="text/javascript"></script>
+<script src="/assets/global/plugins/jquery.min.js" type="text/javascript"></script>
+<script src="/assets/global/plugins/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+
+<!-- Necessary for the date field -->
+<script src="/assets/global/plugins/handsontable/dist/pikaday/pikaday.js" type="text/javascript"></script>
+<script src="/assets/global/plugins/handsontable/dist/moment/moment.js" type="text/javascript"></script>
+
+
+
+
+<div id="critical_warnings_div" style="color: red;">
+  <ul id="critical_warnings_ul">
+  </ul>
+</div>
+<div id="warnings_div" style="color: orange;">
+  <ul id="warnings_ul">
+  </ul>
+</div>
+
+<div id="editable_handsontable"></div>
+
+
+<div class="handsontableDisplayButton">
+  <div width="100%" id="datatableresult">
+  </div>
+
+
+  <div class="col-md-offset-3 col-md-9">
+    <button name="save" id="save" class="btn green">
+        {{ save_button_text }}
+    </button>
+    <a href="javascript:history.back()" class="btn default">Return to service</a>
+    <input id="redirectTo" name="redirectTo" value="" type="hidden">
+  </div>
+
+  </div>
+</div>
+
+
+<script type="text/javascript">
+  
+  {%if handsontable_merge_cells is defined %}
+    var handsontable_merge_cells = {{ handsontable_merge_cells|raw }};
+  {%else%}
+    var handsontable_merge_cells = {};
+  {%endif%}
+  
+  //If merge cells is not used, it is much faster...
+  //var handsontable_merge_cells = {};
+  
+  {%if disabled_indices is defined %}
+    var disabled_indices = {{ disabled_indices|raw }};
+  {%else%}
+    var disabled_indices = {};
+  {%endif%}
+  
+  var cellPropertiesFunction = function (row, col, prop) {
+            
+    var cellProperties = {};
+
+    if (disabled_indices[row] != undefined) {
+      if (disabled_indices[row][col] != undefined){
+        cellProperties.editor = false;
+      }
+      else{
+        cellProperties.editor = "numeric"  ;
+      }
+    }
+    
+    return cellProperties;
+  }
+  
+  function getCellIndices(globalIndices){
+    return [Math.min(globalIndices[0], globalIndices[2]),
+            Math.min(globalIndices[1], globalIndices[3]),
+            Math.max(globalIndices[0], globalIndices[2]),
+            Math.max(globalIndices[1], globalIndices[3])];
+  }
+  
+  {% include(base_template_url~'/handsontableEditor.html.twig') %}
+  
+  var container = document.getElementById('editable_handsontable');
+  var handsontable_data = {{ handsontable_data|raw }};
+  var save_confirmed = false;
+  var hot = new Handsontable(container, {
+    data: handsontable_data,
+    colHeaders: handsontable_column_headers,
+    mergeCells: handsontable_merge_cells,
+    currentRowClassName: 'handsontableCurrentRow',
+    stretchH: "all",
+    fixedRowsTop: window.fixedRowsTop==undefined ? 0 : window.fixedRowsTop,
+    //autoRowSize: true,
+    //autoColSize: true,
+    columns: handsontable_columns,
+    
+    /* Avoid automatic creation of rows on data drag of last row */
+    minSpareRows: 0,
+    minSpareCols: 0,
+    afterCreateRow: function (index, numberOfRows) {
+        handsontable_data.splice(index, numberOfRows);
+    },
+    /* End avoid automatic creation of rows */
+    
+    cells: cellPropertiesFunction,
+    
+  });
+  
+  if (handsonTableContextMenu != undefined){
+    hot.updateSettings(handsonTableContextMenu);
+  }
+  
+  if (after_change_functions!=undefined){
+    for(i=0; i<after_change_functions.length; i++){
+      hot.addHook('afterChange', after_change_functions[i]);
+    }
+  }
+  
+  if(source_data == undefined){
+    source_data = hot.getData();
+  }
+  
+  forceSaveTable = function(jqXHR, textStatus, errorThrown) {
+    save_confirmed = true;
+    saveTable(jqXHR, textStatus, errorThrown);
+  }
+    
+  saveTable = function(jqXHR, textStatus, errorThrown){
+    
+    alertContent = $("#warnings_div").text();
+    if(alertContent.trim()){
+      value = confirm("There are some warnings associated with the changes. Do you want to save the data?");
+      if(value==false){
+        return;
+      }
+    }
+    
+    $.ajax({
+      type: "POST",
+      
+      data: get_hot_submit_data(),
+
+      dataType: "html",
+      async: true,
+    }).success(function(data) {
+      modified_indices = {};
+      after_save_success();
+      $('#modal-confirm').modal('hide');
+    }).complete(function(data) {
+      // To debug, show the output html in the webpage
+      if (data['status']!=402) {
+        $("#datatableresult").html(data['responseText']);
+      }
+      //alert(data['responseText']);
+    }).error(function(data) {
+      if (data['status']==402) {
+        $("#modal-confirm .modal-body").html(data['responseText']);
+        $("#modal-confirm .btn-success").on("click", forceSaveTable);
+        $('#modal-confirm').modal('show');
+      }
+      else {
+        $("#tkModal .modal-body").html('<span style="color: red;">There was an error saving the data. The data was not saved.</span><br/> '
+                                        +data['responseText']);
+        $('#tkModal').modal('show');
+        ul = $("#critical_warnings_ul");
+        ul.html("");
+        $("#critical_warnings_ul").append(
+          $(document.createElement('li')).html(data['responseText'])
+        );
+      }
+    });
+    
+    save_confirmed = false;
+  }
+  
+  Handsontable.Dom.addEvent(save, 'click', saveTable);
+  
+  checkAlerts = function(){
+  $.ajax({
+    type: "POST",
+    data: get_check_alerts_submit_data(),
+    dataType: "json",
+    async: true,
+  }).success(function(data) {
+    //$("#critical_warnings_div").html(data["critical_warnings"]);
+    ul = $("#critical_warnings_ul");
+    ul.html("");
+    $(data["critical_warnings"]).each(function(index, item) {
+      ul.append(
+        $(document.createElement('li')).html(item)
+      );
+    });
+    //$("#warnings_div").html(data["warning"]);
+    ul = $("#warnings_ul");
+    ul.html("");
+    $(data["warning"]).each(function(index, item) {
+      ul.append(
+        $(document.createElement('li')).text(item)
+      );
+    });
+  }).complete(function(data) {
+    //alert(data['responseText']);
+  }).error(function(data) {
+    alert(data['responseText']);
+    $("#datatableresult").html(data['responseText']);
+    alert("There was an error when looking for alerts.");
+  });
+}
+
+
+</script>
+
+
+
+{% include 'common/modal.html.twig' %}
+{% include 'common/modalConfirm.html.twig' %}
+
+

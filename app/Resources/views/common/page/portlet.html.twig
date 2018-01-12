@@ -1,0 +1,74 @@
+<div class="portlet light ">
+  <div class="portlet-title">
+
+    <div class="caption">
+      <i class="icon-compass font-dark"></i>
+      <span class="caption-subject font-dark sbold uppercase"> {{ title|raw }} </span>
+      <br/>
+      <span class="caption-subject"> {{ subtitle|raw }} </span>
+      {% if subtitle2 is defined %}
+        <span class="caption-subject"> {{ subtitle2|raw }} </span>
+      {% endif %}
+    </div>
+    
+    
+    <!-- TEST FOR THE FULLSCREEN MODE -->
+    <!--
+    <div class="tools">
+      <a href="javascript:;" class="collapse" data-original-title="" title=""> </a>
+      <a href="javascript:;" class="fullscreen" data-original-title="" title=""> </a>
+    </div>
+    -->
+    <!-- END TEST -->
+    
+    {% if filter_form is defined and filter_form != null  %}
+      <div class="caption">
+        {% form_theme filter_form 'form/filterFields.html.twig' %}
+        {{ form_start(filter_form, {'attr': {'class': 'form-horizontal'} }) }}
+        {{ form_widget(filter_form.searchBy) }}
+        {{ form_row(filter_form._token) }}
+        <input type="submit" class="btn green submitButton" value="Filter"/>
+        {{ form_end(filter_form) }}
+      </div>
+      
+    {% endif %}
+
+    {% if portlet_actions is defined and portlet_actions!=false %}
+      <div class="actions">
+        {% for action in portlet_actions %}
+          {% if action['modal'] is defined and action['modal']==true %}
+            {# <a href="{{ action['url'] }}" data-remote="false" data-toggle="modal" data-target="#generic_modal"> #}
+            <a href="{{ action['url'] }}" class="dateSelector fancyModal btn blue">
+          {% else %}
+            <a href="{{ action['url'] }}" class="btn btn-circle btn-info">            
+          {% endif %}
+            <i class="fa fa-plus"></i> <span class="hidden-xs"> {{ action["label"] }} </span>
+           </a>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+  </div>
+  
+  {% for subcontent in content %}
+    <div>
+        {{ subcontent|raw }}
+    </div>
+  {% endfor %}
+  
+
+    {% if editable is defined and editable==true %}
+      <div class="form-actions">
+        <div class="row">
+          <div class="col-md-offset-3 col-md-9">
+            <button type="submit" class="btn green">Submit</button>
+            <a href="{{ cancel_path }}" class="btn default">Cancel</a>
+          </div>
+        </div>
+      </div>
+    {% endif %}
+
+</div>
+
+
+

@@ -1,0 +1,46 @@
+{% if add_new_arguments is not defined %}
+  {% set add_new_arguments = {} %}
+{% endif %}
+
+{% if portlet_actions is not defined %}
+  {% set portlet_actions = [] %}
+{% endif %}
+
+{% if edit_all is defined and edit_all %}
+  {% set portlet_actions = portlet_actions|merge([{
+                            "url": path(base_url_prefix~'_multiple_edit', add_new_arguments),
+                            "label": 'Edit all',
+                            "modal": false}]) %}
+{% endif %}
+
+{% if add_new %}
+  {% set portlet_actions = portlet_actions|merge([{
+								"url": path(base_url_prefix~'_edit', add_new_arguments),
+								"label": 'Nuevo '~base_instance_name,
+                "modal": false}]) %}
+{% endif %}
+
+{% if paginated is defined and paginated %}
+  {% set start_instance_num = maxInstancesToList*(page-1)+1 %}
+  {% set end_instance_num = maxInstancesToList*(page-1)+num_shown %}
+  {% set subtitle2 = "Showing page "~page~". From "~start_instance_num~" to "~end_instance_num %}
+  {% set subtitle2 = subtitle2 ~ " <a onclick=\"changeFormPaginationAction($('form'), -1)\"><i class=\"fa fa-arrow-circle-left\"></i></a>" %}
+  {% set subtitle2 = subtitle2 ~ " <a onclick=\"changeFormPaginationAction($('form'), 1)\"><i class=\"fa fa-arrow-circle-right\"></i></a>" %}      
+      
+{% endif %}
+
+{% include 'common/page/portlet.html.twig' with {
+  "title":            title is defined ? title : base_instances_name,
+  "subtitle":         subtitle is defined ? subtitle : num_found is defined ? num_found~' '~base_instances_name~' encontrados.' : '',
+  "subtitle2":        subtitle2 is defined ? subtitle2 : null,
+  "editable":         editable is defined ? editable : false,
+	"cancel_path":      cancel_path is defined ? cancel_path : '',
+
+  "new_form":         new_form is defined ? new_form : false,
+  
+  "filter_form":      filter_form is defined ? filter_form : null,
+    
+	"portlet_actions":  portlet_actions,
+
+  "content":          portlets}
+%}

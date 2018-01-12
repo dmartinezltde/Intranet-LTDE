@@ -1,0 +1,15 @@
+<!-- BEGIN PAGE HEAD-->
+<div class="page-head">
+  <div class="container">
+    <!-- BEGIN PAGE TITLE -->
+    <div class="page-title">
+      <h1>
+        {% if page_head_title is defined %}{{ page_head_title }}{% endif %}
+        {% if page_head_subtitle is defined %}<small>{{ page_head_subtitle }}</small>{% endif %}
+      </h1>
+    </div>
+    <!-- END PAGE TITLE -->
+    {# {% include 'common/_layout_configuration.html.twig' %} #}
+  </div>
+</div>
+<!-- END PAGE HEAD-->

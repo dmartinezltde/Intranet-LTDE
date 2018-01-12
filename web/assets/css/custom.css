@@ -1,0 +1,469 @@
+.page-header .page-header-top .page-logo .logo-default {
+  margin: 0;
+  max-height: 75px;
+}
+
+/* Form labels */
+form div.form-group label.control-label {
+  color: #34495e;
+  font-size: 14px;
+  padding-left: 15px;
+}
+
+/* Form errors */
+form div.form-group span.help-block ul {
+  list-style: none;
+}
+form div.form-group span.help-block ul li {
+  color: #e02222;
+}
+
+/* Form inputs */
+form div.inputmedium input,
+form div.inputmedium select {
+  width: 240px;
+}
+form div.inputshort input,
+form div.inputshort select {
+  width: 145px;
+}
+/* To hide the html5 arrows and calendar icon in input type=date */
+.unstyled::-webkit-inner-spin-button,
+.unstyled::-webkit-calendar-picker-indicator {
+  display: none;
+  -webkit-appearance: none;
+}
+
+/* Service form */
+form[name="service"] div.service_types_form {
+  display: none;
+}
+form[name="service"] div.serviceList p {
+  float: left;
+  padding: 3px;
+  margin: 3px;
+  border: 1px solid #dddddd;
+}
+
+/* Providers form */
+form[name="provider"] div.provider-iata input[type='text'] {
+  text-transform: uppercase;
+}
+
+div.responsiblesAlarms .inputshort {
+  margin-left: 8px;
+}
+
+div.table-scrollable table.table-condensed tbody tr td.actions {
+  white-space: nowrap;
+}
+
+/* Photos and docs */
+#photoSelector table tr td img.img-thumbnail,
+div#photoList div.photo img.img-thumbnail {
+  max-width: 100px;
+  max-height: 100px;
+}
+div#photoList div.photo,
+#tourDocs div div.doc,
+div.docList div.doc,
+div.tourAssociatedList p,
+#categories div.cat {
+  width: 120px;
+  min-height: 110px;
+  text-align: center;
+  float: left;
+  margin: 0 0 10px 0;
+}
+#categories div.cat {
+  width: 140px;
+  margin-right: 4px;
+}
+div.tourTextList p {
+  min-height: 60px;
+  text-align: left;
+}
+div.docList div.doc a.doc {
+  border: 1px solid #dddddd;
+  padding: 1px;
+  display: block;
+  max-width: 100px;
+}
+div#photoList div.photo a.action,
+div.docList div.doc a.action {
+  display: inline-block;
+  margin-top: 4px;
+}
+#categories div.cat span {
+  display: block;
+  border: 1px solid #dddddd;
+  width: 100%;
+  padding: 5px;
+  min-height: 40px;
+  margin-right: 5px;
+}
+
+div.listactions {
+  margin-top: 4px;
+}
+div.listactions div[class^="col-sm-"] {
+  margin-left: 0;
+  padding-left: 0;
+  padding-right: 5px;
+}
+
+/* Tour, itinerary and period tables */
+table tr th.tableActions,
+table tr td.tablePublish {
+  text-align: right;
+}
+table tr th.tableActions .btn.btn-circle {
+  font-size: 13px;
+}
+table.itineraries tr th.tableActions,
+table.itineraries tr td.tableActions {
+  width: 150px;
+}
+table.itineraries tr th.tablePublish,
+table.itineraries tr td.tablePublish {
+  width: 110px;
+}
+table.activities tr td.tableActions {
+  width: 180px;
+}
+table.activities tr td.tableActions.shorter {
+  width: 100px;
+}
+
+form[name="activity_group"] div.row #optionalDiv,
+form[name="activity_group"] div.row #reserveTimeDiv {
+  width: 50%;
+  float: left;
+}
+
+/* Modal selected Dates */
+.days-week .col-md-4 {
+  width: 110px;
+  padding: 0;
+}
+
+/* Services */
+#service_type_guide_form #destinations span.help-block {
+  display: block;
+  float: none;
+  clear: both;
+  margin-top: 0;
+}
+table.assignable-services select.service_rank {
+  width: 35px;
+}
+table.assignable-services select.service_cat {
+  width: 55px;
+}
+
+/* Service edit dates */
+table.serviceDataTable tr td.actionscol {
+  width: 100px;
+}
+table.serviceDataTable tbody tr td input,
+table.serviceDataTable tbody tr td select,
+table.serviceDataTable tbody tr td a.dateSelector,
+table.serviceDataTable tbody tr td div.checker span {
+  display: none;
+}
+table.serviceDataTable tbody tr td.num input {
+  width: 100px;
+}
+table.serviceDataTable tbody tr td.rates .form-group {
+  margin: 0;
+}
+table.serviceDataTable tbody tr td.rates .form-group label,
+table.serviceDataTable tbody tr td.rates .form-group span {
+  padding-top: 6px;
+  padding-left: 0;
+}
+table.serviceDataTable tbody tr td.rates .form-group label {
+  width: 90px;
+}
+table.serviceDataTable tbody tr td.rates input {
+  width: 70px;
+}
+table.serviceDataTable tbody tr td.num.int input {
+  width: 60px;
+}
+table.serviceDataTable tbody #sampleRow {
+  display: none;
+}
+table.serviceDataTable tbody tr td.dates strong {
+  display: block;
+}
+table.serviceDataTable tbody tr.sameDateRow td {
+  border-top: 0;
+}
+table.serviceDataTable tbody tr.sameDateRow td.dates strong {
+  display: none;
+}
+
+table.subservices {
+  margin: 0;
+}
+
+#returnDateSelector {
+  margin-top: 40px;
+}
+
+/* Notifications stickers */
+.jquery-notific8-notification.tkwarning {
+  color: #c29d0b;
+  background-color: #f9e491;
+  border-color: #A46A1F;
+  border-radius: 4px;
+  overflow-y: auto;
+}
+.jquery-notific8-notification.tkerror {
+  color: #e73d4a;
+  background-color: #fbe1e3;
+  border-color: #FF0000;
+  border-radius: 4px;
+  overflow-y: auto;
+}
+
+table.roomingList {
+  border-bottom: 2px solid #000000;
+}
+table.roomingList tr.newroom td {
+  border-top: 2px solid #000000;
+}
+#rooming_list tbody tr.new_date td {
+  border-top: 5px solid #000000 !important;
+}
+#rooming_list tr td.agegroup select,
+#rooming_list tr td.resmode select,
+#rooming_list tr td.roomtype select {
+  width: 110px;
+}
+#rooming_list tr.extra_row select {
+  max-width: 100px;
+}
+#rooming_list tr.template_row td.reservation_block_odd,
+#rooming_list tr.template_row td {
+  background-color: #1BA39C;
+}
+#rooming_list tr.template_row td.reservation_block {
+  background-color: #555;
+}
+#rooming_list tr.template_row td,
+#rooming_list tr.template_row td a {
+  color: #fff;
+}
+
+/* Overwriting styles */
+.portlet.box.green>.portlet-title>.actions .btn-default {
+  border-color: #FFFFFF;
+  color: #FFFFFF;
+}
+
+/* Add a symbol in all the mandatory fields */
+.required:after {
+    content: " *";
+}
+
+
+.odd_row {
+   background-color: #e7ecf1; /*#F4EFEC; */
+}
+
+.non_odd_row {
+   /*background-color: #e6e6e6;*/
+}
+
+
+tr.border_bottom td {
+  border-bottom:1pt solid black;
+}
+
+.handsontableDisplayButton {
+  display: inline-block;
+  padding-top: 15px;
+  width: 100%;
+  
+}
+
+.ocult {
+  display: none;
+}
+
+/* Reservations */
+table.reservation-Booked {
+  background-color: #e9e919;
+}
+table.reservation-Confirmed {
+  background-color: #148A14;
+  color: white;
+}
+table.reservation-RQ {
+  background-color: #FFA500;
+}
+table.reservation-Paid {
+  background-color: #148A14;
+  color: white;
+}
+table.reservation-Canceled {
+  background-color: #8B0000;
+  color: white;
+}
+
+#rooming_list tbody tr.new_date td {
+  border-top: 1px solid #000;
+}
+#rooming_list tbody tr td.reservation_block {
+  background-color: #efefef;
+  border: 0;
+}
+#rooming_list tbody tr td.reservation_block_odd {
+  background-color: #defdef;
+  border: 0;
+}
+#rooming_list tbody tr td.adjacent {
+  border-top: 1px solid #000;
+  border-right: 1px solid #000;
+  border-bottom: 1px solid #000;
+}
+#rooming_list tbody tr td.white {
+  background-color: #fff;
+  border: 0;
+}
+
+#roommates_lists div.connectedSortable {
+  border: 1px solid #000;
+  padding: 4px 4px 10px 4px;
+  background: #fce99d;
+  margin-bottom: 10px;
+}
+#roommates_lists div.connectedSortable div.sortable {
+  border: 1px solid #666;
+  padding: 4px;
+  margin: 2px 0 2px 0;
+  background: #fff;
+  cursor: pointer;
+}
+
+.historyInfo {
+  padding: 20px;
+  border-bottom: 1px solid #7b7b7b;
+}
+
+.historyInfoTitle {
+  font-weight: bold;
+  
+}
+
+.historyInfoContent {
+  font-weight: 400;
+}
+
+/* PERIOD SUMMARY STYLESHEET */
+.summaryDates {
+  padding: 5px;
+  display: inherit;
+}
+
+.summaryInfoDiv {
+  background-color: #50b0ed;
+  padding: 5px;
+  margin-top: 10px;
+  color: white;
+  font-weight: bold;
+  border: 2px solid #395ae9;
+}
+
+.summarySuccessDiv {
+  background-color: #57cb6d;
+  padding: 5px;
+  margin-top: 10px;
+  color: white;
+  font-weight: bold;
+  border: 2px solid #0f890f;
+}
+
+.summaryWarningDiv {
+  background-color: #e7cc55;
+  padding: 5px;
+  margin-top: 10px;
+  color: white;
+  font-weight: bold;
+  border: 2px solid #c3930a;
+}
+
+.summaryErrorDiv {
+  background-color: #ff7c7c;
+  padding: 5px;
+  margin-top: 10px;
+  color: white;
+  font-weight: bold;
+  border: 2px solid #ff1313;
+}
+
+.summarySalesBox {
+  padding: 10px;
+}
+
+.sm  {border-collapse:collapse;border-spacing:0;border-color:#999;border:none;text-align:center;}
+.sm td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border-style:solid;border-width:0px;overflow:hidden;word-break:normal;border-color:#999;color:#444;background-color:#F7FDFA;}
+.sm th{font-family:Arial, sans-serif;font-size:14px;font-weight:bold;padding:10px 5px;border-style:solid;border-width:0px;overflow:hidden;word-break:normal;border-color:#999;color:#fff;background-color:#50B0ED;text-align:center;}
+.sm .sm-yw4l{vertical-align:top}
+.sm .sm-6k2t{background-color:#D2E4FC;vertical-align:top}
+
+/* enable absolute positioning */
+.inner-addon { 
+    position: relative; 
+}
+
+/* style icon */
+.inner-addon .fa {
+  position: absolute;
+  padding: 10px;
+  pointer-events: none;
+}
+
+/* align icon */
+.left-addon .fa  { left:  0px;}
+.right-addon .fa { right: 0px;}
+
+/* add padding  */
+.left-addon input  { padding-left:  30px; }
+.right-addon input { padding-right: 30px; }
+
+/* END PERIOD SUMMARY STYLESHEET */
+
+.selectorPortlet {
+  background-color: red;
+  color: white;
+  padding: 10px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.seeNotifications {
+  cursor: pointer;
+  padding: 10px;
+  color: white;
+  font-weight: bold;
+  text-align: center;
+}
+.notificationInfoDiv {
+  background-color: #50b0ed;
+  border: 2px solid #395ae9;
+}
+.notificationSuccessDiv {
+  background-color: #57cb6d;
+  border: 2px solid #0f890f;
+}
+.notificationWarningDiv {
+  background-color: #e7cc55;
+  border: 2px solid #c3930a;
+}
+.notificationErrorDiv {
+  background-color: #ff7c7c;
+  border: 2px solid #ff1313;
+}

@@ -1,0 +1,48 @@
+{% if create_new_row %}
+  {{ form_start(form, {'attr': {'id': 'editForm', 'class': 'form-horizontal'} }) }}
+
+{% endif %}
+
+<div class="row">
+      <div class="col-md-12">
+        <div class="portlet light ">
+          <div class="portlet-title">
+            <div class="caption font-dark">
+              <i class="icon-plane font-dark"></i>
+              <span class="caption-subject bold uppercase"> {{ instances|length }} {{ instance_name }} found</span>
+            </div>
+            {% if create_new_row == false %}
+              {% if actions %}
+                <div class="actions">
+                  <a href="{{ path( urlprefix ~ '_edit') }}" class="btn btn-circle btn-info">
+                    <i class="fa fa-plus"></i>
+                    <span class="hidden-xs"> New {{ instance_name }} </span>
+                  </a>
+                </div>
+              {% endif %}
+            {% endif %}
+          </div>
+          <div class="portlet-body">
+            {% include 'common/table/editable_table.html.twig' %}
+
+            {% include 'common/modalConfirm.html.twig' with {
+              'body': 'You are about to delete the '~ instance_name ~'. Are you sure?'
+            } %}
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-actions modal-footer">
+      <div class="row">
+        <div class="col-md-offset-3 col-md-9">
+          <button type="submit" id="submit" class="btn green">Submit</button>
+          <a href="" class="btn default" data-dismiss="modal">Cancel</a>
+        </div>
+      </div>
+    </div>
+
+{% if create_new_row %}
+  {{ form_rest(form) }}
+{% endif %}

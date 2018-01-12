@@ -1,0 +1,132 @@
+{% form_theme form with ['form/filterFields.html.twig']  %}
+
+
+{{ form_start(form, {'attr': {'class': 'form-horizontal'} }) }}
+
+  <div class="form-body">
+
+    {{ form_errors(form) }}
+
+    {% for form_group_name, group_form_fields in form_fields %}
+
+      <h4>{{ form_group_name }}</h4>
+
+      {% for form_field_row in group_form_fields %}
+      
+        <div class="row">
+        <div class="col-md-12">
+        
+        {% set form_field_row_columns = form_field_row|length %}
+        {% set form_col_width = 12/form_field_row_columns %}
+        {% set c_col = 0 %}
+        
+        {% for form_field in form_field_row %}
+            
+            {% if c_col == 0 and form_field_row_columns == 2 %}
+              <div class="col-md-4 col-md-offset-2">
+            {% elseif c_col == 1 and form_field_row_columns > 1 %}
+              <div class="col-md-4">
+            {% elseif c_col == 0 and form_field_row_columns == 1 %}
+              <div>
+            {% endif %}
+            
+            {% set c_col = c_col + 1 %}
+            
+            {# PROCESS SUBFORMS #}
+            {% if form_field not in form.children|keys and "." in form_field %}
+              {% set tform_field = form_field|split(".") %}
+              {# {{ dump(form.children[tform_field[0]].children) }} #} 
+              {{ form_row(form.children[tform_field[0]].children[tform_field[1]]) }}
+              {{ form_errors(form.children[tform_field[0]].children[tform_field[1]]) }}
+            
+            {# PROCESS NORMAL FIELDS #}
+            {% elseif form_field in form.children|keys %}
+              {# {{ dump(form.children[form_field]) }} #} 
+              {{ form_row(form.children[form_field]) }}
+              {{ form_errors(form.children[form_field]) }}
+              
+              {# Help block #}
+              {% if form.children[form_field].vars["description"] is defined %}
+                {% if form.children[form_field].vars["description"] != "" %}
+                  {% if form.children[form_field].vars["description"]["simple_description"] is defined %}
+                    <div class="col-md-3"></div>
+                    <div class="col-md-9">
+                      <span class="help-block">
+                        {{ form.children[form_field].vars["description"]["simple_description"] }}
+                      </span>
+                    </div>
+                  {% else %}
+                    <div id="{{ form.children[form_field].vars["id"] }}_info_div" class="row" style="display: {{ form.children[form_field].vars["description"]["display"] }};">
+                      <div class="col-md-3"></div>
+                      <div class="note note-info col-md-9">
+                        <h4 class="block">{{ form.children[form_field].vars["description"]["title"] }}</h4>
+                        <p>
+                          {{ form.children[form_field].vars["description"]["content"]|raw }}
+                        </p>
+                      </div>
+                    </div>
+                  {% endif %}
+                {% endif %}
+              {% endif %}
+              
+              {# Informative block #}
+              {# 
+              {% if form.children[form_field].vars["attr"]["hidden-info"] is defined %}
+                <div id="info_div" class="row" style="display: {{ form.children[form_field].vars["attr"]["hidden-info"]["display"] }};">
+                  <div class="col-md-3"></div>
+                    <div class="note note-info col-md-9">
+                      <h4 class="block">{{ form.children[form_field].vars["attr"]["hidden-info"]["title"] }}</h4>
+                      <p>
+                        {{ form.children[form_field].vars["attr"]["hidden-info"]["content"]|raw }}
+                      </p>
+                    </div>
+              </div> 
+              {% endif %} #}
+              {# End informative block #}
+              
+            {% else %}
+              FIELD NOT FOUND: {{ form_field|raw }}
+            {% endif %}
+  
+            </div>
+        {% endfor %}
+        </div>
+        </div> {# close form_field_row #}
+      {% endfor %}
+    {% endfor %}
+
+  </div>
+
+  {{ form_row(form._token) }}
+  
+  {# Add a hidden field for the referer page #}
+  {% if "referer" in form.children|keys %}
+    {{ form_row(form.children["referer"]) }}
+  {% endif %}
+  
+  {# Add a hidden field for specify duplication #}
+  {% if "duplication" in form.children|keys %}
+    {{ form_row(form.children["duplication"]) }}
+  {% endif %}
+  
+  {% if additional_portlets is defined %}
+    {% for portlet in additional_portlets %}
+      <div class="row">
+        <div class="col-md-12">
+          {{ portlet|raw }}
+        </div>
+      </div>
+    {% endfor %}
+  {% endif %}
+
+  <div class="form-actions">
+    <div class="row">
+      <div class="col-md-offset-3 col-md-9">
+        <button type="submit" class="btn green">Submit</button>
+        <a href="{{ form_cancel }}" class="btn default">Cancel</a>
+      </div>
+    </div>
+  </div>
+
+
+

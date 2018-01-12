@@ -1,0 +1,392 @@
+{# Expanded choice type: checkbox and radio buttons #}
+{% block expanded_choice_widget %}
+  <div>
+    <ul style="list-style-type: none;">
+    {% for field in form %}
+      <li>
+        {# {{ form_widget(field, {'attr': {'style': 'margin-left: 0px;'}}) }}   {# Added because radio buttons didn't work correctly. #}
+        {{ form_widget(field) }}
+        {{ form_errors(field) }}
+        {{ field.vars["label"] }}
+      </li>
+    {% endfor %}
+    </ul>
+  </div>
+{% endblock %}
+
+
+{# Extended entity: checkbox and radio buttons #}
+{% block expanded_entity_widget %}
+  <div>
+    {% if form|length > 0 %}
+      <ul style="list-style-type: none;">
+      {% for field in form %}
+        <li>
+          {{ form_widget(field) }}
+          {{ form_errors(field) }}
+          {{ field.vars["label"] }}
+        </li>
+      {% endfor %}
+      </ul>
+    {% else %}
+      <div class="note note-danger col-md-9">
+        {% if form.vars["attr"]["missing_elements_title"] is defined %}
+          {{ form.vars["attr"]["missing_elements_title"] }}
+        {% else %}
+
+        {% endif %}
+        {% if form.vars["attr"]["missing_elements_message"] is defined %}
+          <p>
+            {{ form.vars["attr"]["missing_elements_message"] }}
+          </p>
+        {% else %}
+          There are not {{ form.vars["label"] }} to show.
+        {% endif %}
+      </div>
+    {% endif %}
+  </div>
+{% endblock %}
+
+
+{# Extended detailed entity: checkbox and radio buttons #}
+{% block expanded_detailed_entity_widget %}
+  <div>
+    {% if form|length > 0 %}
+      <table id="datatable_1" class="table table-striped table-bordered table-hover order-column">
+        <thead>
+        </thead>
+        <tr>
+          <th></th>
+          {% if form.vars["tableHeaders"] != null %}
+            {% set tableHeaders = form.vars["tableHeaders"] %}
+          {% else %}
+            {% set tableHeaders = form.vars["attr"]["entity_fields"] %}
+          {% endif %}
+          {% for header_field in tableHeaders %}
+            <th>
+              {{ header_field }}
+            </th>
+          {% endfor %}
+        </tr>
+        <tbody>
+        {% for field in form %}
+          <tr>
+            <td>
+              {{ form_widget(field) }}
+            </td>
+            {% for entity_field in form.vars["attr"]["entity_fields"] %}
+              <td>
+              
+                {% set instance = form.vars["choices"][field.vars["value"]].data %}
+              
+                {% set subfields = entity_field|split(".") %}
+          
+                {% if subfields|length > 1 %}
+            
+                  {% set idata = instance %}
+
+                  {% for ifield in subfields %}
+                    {% set idata = attribute(idata, ifield) %}
+                  {% endfor %}
+            
+                  {{ linkProvider.createLink(idata)|raw }}
+          
+                {% else %}
+                  {{ linkProvider.createLink(attribute(instance, entity_field))|raw }}
+                {% endif %}
+              
+                {# {{ linkProvider.createLink(attribute(instance, entity_field))|raw }} #}                
+              
+              </td>
+            {% endfor %}
+          </tr>
+          <tr>
+            {{ form_errors(field) }}
+          </tr>
+        {% endfor %}
+      </table>
+    {% else %}
+      <div class="note note-danger col-md-9">
+        {% if form.vars["attr"]["missing_elements_title"] is defined %}
+          {{ form.vars["attr"]["missing_elements_title"] }}
+        {% else %}
+          
+        {% endif %}
+        {% if form.vars["attr"]["missing_elements_message"] is defined %}
+          <p>
+            {{ form.vars["attr"]["missing_elements_message"] }}
+          </p>
+        {% else %}
+          There are not {{ form.vars["label"] }} to show.
+        {% endif %}
+      </div>
+    {% endif %}
+  </div>
+{% endblock %}
+
+{# Begin Updatable select #}
+{% block updatable_entity_selector_widget %}
+  {{ form_widget(form) }}
+  <div class="col-md-4">
+    <a href="{{ form.vars["attr"]["url"] }}" class="fancyModal" rel="800">{{ form.vars["attr"]["label"] }}</a>
+  </div>
+  {{ form_errors(form) }}
+{% endblock %}
+{# End Updatable select #}
+
+
+{% block destination_field_widget %}
+    <div class="col-md-3">
+      {{ form_widget(form, {'attr': {'class': 'form-control typehead'}}) }}
+      {{ form_errors(form) }}
+    </div>
+    
+    <div class="col-md-3">
+      <a href="{{ path('destination_selector', {'inputId': "#cityId", 'inputName': "#cityName"}) }}" class="btn btn-outline btn-circle dark btn-sm blue fancyModal"><i class="icon-directions"></i> City</a>      
+      <input type="hidden" id="cityId" name="cityId" value="" />
+</div>
+  </div>
+{% endblock %}
+
+{% block modal_selector_widget %}
+  <div>
+    <div class="col-md-6">
+      {{ form_widget(form, {'attr': {'class': 'form-control typehead'}}) }}
+      {{ form_errors(form) }}
+    </div>    
+    <div class="col-md-6">
+      <a id="{{ form.vars.linkName }}" 
+         href="{{ path(form.vars.inputSelector, form.vars.selectorArguments) }}"
+         class="fancyModal">
+         {{ form.vars.linkText }}
+      </a>
+    </div>
+  </div>
+{% endblock %}
+
+{% block modal_multiple_selector_widget %}
+  <div class="col-md-12">
+    <div id="{{form.parent.vars.block_prefixes.1}}_{{inputPrefix}}MultipleSelector" class="col-md-9 tourAssociatedList tourTextList">
+    {% set initial_multiple_selector_data = [] %}
+    {% for subentity in form.vars.initialData %}
+      {% set initial_multiple_selector_data = initial_multiple_selector_data|merge([subentity.id]) %}
+      <p id="{{form.parent.vars.block_prefixes.1}}_{{inputPrefix}}_{{subentity.id}}">
+        <i class="icon-direction"></i> {{ subentity }}<br>
+        <a href="javascript: removeEntityFromModalMultipleSelectorField('{{form.parent.vars.block_prefixes.1}}_{{inputPrefix}}','{{ subentity.id }}');">Delete</a>
+      </p>
+    {% endfor %}
+    </div>
+    <div class="col-md-3">    
+      <a href="{{ path(form.vars.inputSelector, form.vars.selectorArguments) }}" class="btn btn-outline btn-circle dark btn-sm blue fancyModal"><i class="icon-directions"></i> {{ form.vars.inputSelectorLabel }}</a>
+      <input id="{{form.parent.vars.block_prefixes.1}}_{{inputPrefix}}Id" name="{{form.parent.vars.block_prefixes.1}}[{{ inputPrefix }}Id]" value="{{ initial_multiple_selector_data|join(",") }}" type="hidden">
+    </div>
+  </div>
+  <span class="col-md-12 help-block">{{ form.vars.selectorDescription }}</span>
+{% endblock %}
+
+{# Extended entity: date picker #}
+{% block date_picker_field_widget %}
+  {% if form.vars["attr"]["fullwidth"] is defined %}
+    <div class="col-md-12">
+  {% else %}
+    <div class="col-md-{{form.vars["width"]}}">
+  {% endif %}
+    <div class="input-group date date-picker">
+      {{ form_widget(form) }}
+      <span class="input-group-btn">
+        <button class="btn default" type="button"><i class="fa fa-calendar"></i></button>
+      </span>
+    </div>
+  </div>
+{% endblock %}
+
+
+{# Time type: time selector #}
+{% block time_widget %}
+  <div class="col-md-9">
+    <div class="input-group">
+      {{ form_widget(form, {'attr': {'class': 'form-control timepicker timepicker-default'}}) }}
+      {# <input id="activity_iniTime" name="activity[iniTime]" required="required" class="form-control timepicker timepicker-default" type="text"> #}
+      <span class="input-group-btn">
+        <button class="btn default" type="button"><i class="fa fa-clock-o"></i></button>
+      </span>
+    </div>
+  </div>
+{% endblock %}
+
+
+{% block datetime_widget %}
+  <div class="col-md-3">
+    <div class="input-group date date-picker">
+      {{ form_widget(form.date, {'attr': {'class': 'form-control unstyled'}}) }}
+      <span class="input-group-btn">
+        <button class="btn default" type="button"><i class="fa fa-calendar"></i></button>
+      </span>
+    </div>
+  </div>
+  <div class="col-md-3">
+    {{ form_widget(form.time, {'attr': {'class': 'form-control timepicker timepicker-default unstyled'}}) }}
+  </div>
+{% endblock %}
+
+
+{# Extended entity: single input #}
+{% block one_to_many_widget %}
+  
+  {% spaceless %}
+    <table>
+    {% set index = 0 %}
+    {% for subform in form %}
+
+      {% set idata = subform.vars["data"] %}
+      {# Look if it has to be shown or not #}
+      
+      {% set found = true %}
+      {% if form.vars.filter is defined and form.vars.filter != null %}
+        {% if filterField is defined and filterField != null %}
+          {% set filterFieldData = attribute(idata, filterField) %}
+        {% else %}
+          {% set filterFieldData = idata %}
+        {% endif %}
+        {% set found = false %}
+        {% for ifilter in form.vars.filter %}
+          {% if ifilter.id == filterFieldData.id %}
+            {% set found = true %}
+          {% endif %}
+        {% endfor %}
+      {% endif %}
+      {# End filter #}
+
+      {# Show only if it was found in the filters or if the filters were not set #}
+      {% if found == true %}
+
+        {% set index = index + 1 %}
+        {% if form.vars.title != null %}
+          <tr>
+            <td colspan="3">
+              <b>{{ form.vars.title|replace({"INDEX": index}) }}</b>
+            </td>
+          </tr>
+        {% endif %}
+        {% for field in subform %}
+          <tr>
+            {% if form.vars.attr.label_field is defined %}
+
+              {# {{ dump(field) }} #}
+              {% set subfields = form.vars["attr"]["label_field"]|split(".") %}
+              {% set idata = subform.vars["data"] %}
+
+              {% for ifield in subfields %}
+                {% set idata = attribute(idata, ifield) %}
+              {% endfor %}
+              <td style="vertical-align:top; padding: 5px;">{{ idata }}</td>
+              {# <td style="padding: 5px;">{{ attribute(subform.vars["data"], form.vars["attr"]["label_field"]) }}</td> #}
+            {% else %}
+              <td style="padding: 5px;">{{ form_label(field) }}</td>
+            {% endif %}
+            <td style="padding: 5px;">{{ form_widget(field) }}</td>
+            <td style="padding: 5px;">{{ form_errors(field) }}</td>
+          </tr>
+        {% endfor %}
+      {% endif %}
+    {% endfor %}
+    </table>
+    {{ form_errors(form) }}
+  {% endspaceless %}
+{% endblock %}
+
+{# I do not like it here, but I have no time now how to set up a correct prototype. TODO #}
+{% block segment_widget %}
+  <!--<li>-->
+    <!--<b>Segment</b> ( <a href="#" class="remove-segment"> Remove this segment </a> )-->
+    <b>Segment</b>
+    <div class="row">
+       <div class="col-md-12">
+           {{ form_row(form.flightNumber) }}
+       </div>
+       
+       <div class="row" style="padding-left:30px;">
+        <div class="col-md-12">
+            <b>Departure</b>
+        </div>
+
+        <div class="col-md-12">
+            <div class="col-md-4">
+                {{ form_row(form.departureCity) }}
+            </div>
+            <div class="col-md-3">
+                {{ form_row(form.departureIATA) }}
+            </div>
+            <div class="col-md-5">
+                {{ form_row(form.departureTime) }}
+            </div>
+        </div>    
+       </div>
+       
+       <div class="row" style="padding-left:30px;">
+        <div class="col-md-12">
+            <b>Arrival</b>
+        </div>
+
+        <div class="col-md-12">   
+            <div class="col-md-4">
+                {{ form_row(form.arrivalCity) }}
+            </div>
+            <div class="col-md-3">
+                {{ form_row(form.arrivalIATA) }}
+            </div>
+            <div class="col-md-5">
+                {{ form_row(form.arrivalTime) }}
+            </div>
+        </div>     
+       </div>
+           
+       {{ form_row(form.departureCityId) }}
+       {{ form_row(form.arrivalCityId) }}
+    </div>   
+    
+  <!--</li>-->
+{% endblock %}
+
+
+ol li:before {
+    content: 'Q' counter(item, decimal) '. ';
+    counter-increment: item;
+}
+
+{% block one_to_many_with_addition_widget %}
+  <div>
+    <ol style="counter-reset: item; list-style-type: decimal;" class="{{form.vars.fieldName}}" data-prototype="{{ form_widget(form.vars.prototype)|e('html_attr') }}">
+      {% for child in form %}
+        <li>
+          <!--<h4 style='display: inline;'>{{ form.vars.fieldName }}</h4>-->
+          {{ form_widget(child, {'attr':{'class':'collection-item'}}) }}
+        </li>
+      {% endfor %}
+    </ol>
+  </div>
+{% endblock %}
+
+
+{% block nested_product_checkbox_selector_widget %}
+  <div>
+    {% include "common/entity/product/nestedProductCheckboxSelector.html.twig" with {"tours": form.vars.tours,
+                                                                                     "subproductsHash": form.vars.subProductsHash,
+                                                                                     "product_field_prefix": form.vars.id,
+                                                                                     "product_field_name": form.vars.full_name,
+                                                                                     "subproduct_field_prefix": form.vars.id|replace({"products": "subProducts"}),
+                                                                                     "subproduct_field_name": form.vars.full_name|replace({"products": "subProducts"}),
+                                                                                     "all_subproducts_field_prefix": form.vars.id|replace({"products": "allSubproducts"}),
+                                                                                     "all_subproducts_field_name": form.vars.full_name|replace({"products": "allSubproducts"}),
+                                                                                     "selected_products": form.vars.products,
+                                                                                     "selected_subproducts": form.vars.subProducts,
+                                                                                     "selected_all_subproducts": form.vars.allSubproducts} %}
+  </div>
+{% endblock %}
+
+
+{% block specific_template_widget %}
+  <div>
+    {% include form.vars.template with {"data": form.vars.data} %}
+  </div>
+{% endblock %}

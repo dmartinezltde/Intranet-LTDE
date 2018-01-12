@@ -1,0 +1,152 @@
+{# Trick to make the group actions only available in the first group level #}
+{% if group_level is not defined or group_level == 0 %}
+  {% set group_level = 0 %}
+  {% set group_rowspan = [] %}
+  {% set group_names = [] %}
+{% endif %}
+
+{% for group_name in grouped_instances|keys %}
+
+	{% if group_level==0 %}
+		{% set current_main_row_index = current_main_row_index + 1 %}
+	{% endif %}
+  
+  {% if current_main_row_index%2 != 0 %}
+    {% set classes="odd_row"  %}
+  {% else %}
+    {% set classes = "non_odd_row" %}
+  {% endif %}
+  
+  {% if group_level==0 or (closed_row is defined and closed_row==true) %}
+    <tr class="{%if row_classes is defined %}{{row_classes}}{%endif%}">
+    {% set closed_row = false %}
+  {% endif %}
+  
+  {# As instances can have nested instances, each instance may have a different rows #}
+  {# For the moment, this only works with a single group level #}
+  {% set extra_rowspan=0 %}
+  {% for i in grouped_instances[group_name] %}
+    {% if grouped_instances[group_name][0] is defined %}
+      {% set instance_rowspan=1 %}
+      {% if base_table_rowspan is defined %}
+        {% for base_table_rowspan_attribute in base_table_rowspan|keys %}
+          {% if base_table_rowspan_attribute in base_table_attribute_arguments|keys %}
+            {% set attr_args = base_table_attribute_arguments[base_table_rowspan_attribute] %}
+          {% else %}
+            {% set attr_args = {} %}
+          {% endif %}
+          {% set temp = attribute(i, base_table_rowspan_attribute, attr_args) %}
+          {% if temp|length > instance_rowspan %}
+            {% set instance_rowspan = temp|length %}
+          {% endif %}
+        {% endfor %}
+      {% endif %}
+    {% endif %}
+    {% set extra_rowspan = extra_rowspan + instance_rowspan - 1 %}
+  {% endfor %}
+  
+
+  {% set current_row_span = grouped_instances[group_name]|calculateRowSpan - 1 + extra_rowspan %}
+  <td rowspan="{{ current_row_span }}" class=" {{classes}} {%if add_cell_column_class is defined and add_cell_column_class%}{{grouped_instances_col[0]}}{%endif%}">
+    {{ group_name|raw }}
+    {% if group_level == 0 %}
+      {% set group_rowspan = group_rowspan|merge([current_row_span]) %}
+      {% set group_names = group_names|merge([group_name]) %}
+    {% endif %}
+  </td>
+  
+  {% if grouped_instances[group_name][0] is not defined %}
+  
+    {% include 'common/table/_editable_table_row_group.html.twig' with {'grouped_instances': grouped_instances[group_name],
+                                                                        'grouped_instances_col' : grouped_instances_col[1:],
+                                                                        'group_level': group_level +1 } %}
+    
+    {# Force reset group variables #}
+    {# {% if editable and group_actions is defined and group_actions != null  %} #}
+    {% if group_actions is defined and group_actions != null  %}
+      {% set group_level = 0 %}
+      {% set group_rowspan = [] %}
+      {% set group_names = [] %}
+    {% endif %}
+    
+  {% else %}
+    
+    {% set i = grouped_instances[group_name][0] %}
+    
+    {% set instance_rowspan=1 %}
+    {% if base_table_rowspan is defined %}
+      {% for base_table_rowspan_attribute in base_table_rowspan|keys %}
+        {% if base_table_rowspan_attribute in base_table_attribute_arguments|keys %}
+          {% set attr_args = base_table_attribute_arguments[base_table_rowspan_attribute] %}
+        {% else %}
+          {% set attr_args = {} %}
+        {% endif %}
+        {% set temp = attribute(i, base_table_rowspan_attribute, attr_args) %}
+        {% if temp|length > instance_rowspan %}
+          {% set instance_rowspan = temp|length %}
+        {% endif %}
+      {% endfor %}
+    {% endif %}
+	
+    {% include('common/table/_editable_table_row.html.twig') %}
+    
+    {# Add group actions if necessary #}
+    {# For now, actions is only applied to the firsts level #}
+    {# {% if editable and group_actions is defined and group_actions != null and group_level != -1 %} #}
+    {% if group_actions is defined and group_actions != null and group_level != -1 %}
+      {% set group_level = -1 %}
+      <td rowspan="{{ group_rowspan[0] }}">
+        <ul style="list-style:none; padding-left:0;">
+        {% for group_action in group_actions|keys %}
+          {% set action_url = group_actions[group_action] %}
+          {% if group_action == "duplicate" %}
+            <li><a href="{{ action_url|replace({'XXX': group_names[0]|url_encode}) }}" class="dateSelector fancyModal">
+              <i class="fa fa-plus"></i> <span class="hidden-xs">Duplicate</span>
+            </a>
+          {% elseif group_action == "delete" %}
+            <li><a data-href="{{ action_url|replace({'XXX': group_names[0]|url_encode}) }}" data-toggle="modal" data-target="#modal-confirm"><i class="fa fa-trash-o"></i> Delete</a>
+          {% else %}
+            <li><a data-href="{{ action_url|replace({'XXX': group_names[0]|url_encode}) }}" data-toggle="modal" data-target="#modal-confirm"><i class="fa fa-edit-o"></i>{{ group_action }}</a>
+          {% endif %}
+        {% endfor %}
+        </ul>
+      </td>
+    {% endif %}
+    </tr>
+    {% set closed_row = true %}
+    
+    {% for i in grouped_instances[group_name][1:] %}
+      
+			
+      {% if current_main_row_index%2 != 0 %}
+        {% set classes="odd_row"  %}
+      {% else %}
+        {% set classes = "non_odd_row" %}
+      {% endif %}
+    
+    
+      {% set instance_rowspan=1 %}
+      {% if base_table_rowspan is defined %}
+        {% for base_table_rowspan_attribute in base_table_rowspan|keys %}
+          {% if base_table_rowspan_attribute in base_table_attribute_arguments|keys %}
+            {% set attr_args = base_table_attribute_arguments[base_table_rowspan_attribute] %}
+          {% else %}
+            {% set attr_args = {} %}
+          {% endif %}
+          {% set temp = attribute(i, base_table_rowspan_attribute, attr_args) %}
+          {% if temp|length > instance_rowspan %}
+            {% set instance_rowspan = temp|length %}
+          {% endif %}
+        {% endfor %}
+      {% endif %}
+    
+      <tr class="{% if row_classes is defined %}{{row_classes}}{%endif%}">
+        {% include('common/table/_editable_table_row.html.twig') %}
+        {% set closed_row = true %}
+      {# </tr> #}
+      {% set closed_row = true %}
+    {% endfor %}
+
+  {% endif %}
+
+{% endfor %}

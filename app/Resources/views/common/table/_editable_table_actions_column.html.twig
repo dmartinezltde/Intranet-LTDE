@@ -1,0 +1,33 @@
+{% if actions %}
+  <td rowspan="{{ instance_rowspan }}" class="{{ classes }}" >
+    {% if i.editable is not defined or i.editable==true %}
+      {% if actions.edit is defined %}
+        <a href="{{ path(urlprefix ~ '_edit', { 'id': i.id }) }}"><i class="fa fa-edit"></i> Editar</a><br/>
+      {% endif %}
+      {% if actions.duplicate is defined %}
+        <a href="{{ path(urlprefix ~ '_duplicate', { 'id': i.id }) }}"><i class="fa fa-edit"></i> Duplicar</a><br/>
+      {% endif %}
+      {% if actions.delete is defined %}
+        <a data-href="{{ path(urlprefix ~ '_delete', { 'id': i.id }) }}" data-toggle="modal" data-target="#modal-confirm" class="{{urlprefix ~ '_delete'}}"><i class="fa fa-trash-o"></i> Eliminar</a><br/>
+      {% endif %}
+      {% if actions.select is defined %}
+        <button data-instance="{{ i.id }}" class="btn btn-default select">Seleccionar</button>
+      {% endif %}
+      {% if actions.specific is defined %}
+        {% for specific_action in actions.specific %}
+          {% if specific_action.modal is defined and specific_action["modal"] == true %}
+            {# <a data-href="{{ specific_action["url"]|replace({'XXX': i.id}) }}" data-toggle="modal" data-target="#modal-content"><i class="fa fa-edit-o"></i> {{ specific_action["label"] }}</a><br/> #}
+            <a href="{{ specific_action["url"]|replace({'XXX': i.id}) }}" class="fancyModal"><i class="fa fa-edit"></i> {{ specific_action["label"] }}</a><br/>
+          {% else %}
+            {% if specific_action.confirm is defined and specific_action.confirm == true %}
+              <a data-href="{{ specific_action["url"]|replace({'XXX': i.id}) }}" data-toggle="modal" data-target="#modal-confirm"><i class="fa fa-edit-o"></i> {{ specific_action["label"] }}</a><br/>
+            {% else %}
+              <a href="{{ specific_action["url"]|replace({'XXX': i.id}) }}"><i class="fa fa-edit-o"></i> {{ specific_action["label"] }}</a><br/>
+            {% endif %}
+          {% endif %}
+        {% endfor %}
+      {% endif %}
+    {% endif %}
+  </td>
+{% endif %}
+

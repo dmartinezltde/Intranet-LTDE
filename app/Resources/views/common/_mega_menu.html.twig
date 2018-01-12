@@ -1,0 +1,91 @@
+<!-- BEGIN HEADER MENU -->
+<div class="page-header-menu">
+  <div class="container">
+    {#
+    <!-- BEGIN HEADER SEARCH BOX -->
+    <form class="search-form" action="#" method="GET">
+      <div class="input-group">
+        <input type="text" class="form-control" placeholder="Search" name="query">
+        <span class="input-group-btn">
+            <a href="javascript:;" class="btn submit">
+              <i class="icon-magnifier"></i>
+            </a>
+        </span>
+      </div>
+    </form>
+    <!-- END HEADER SEARCH BOX -->
+    #}
+
+    <!-- BEGIN MEGA MENU -->
+    <!-- DOC: Apply "hor-menu-light" class after the "hor-menu" class below to have a horizontal menu with white background -->
+    <!-- DOC: Remove data-hover="dropdown" and data-close-others="true" attributes below to disable the dropdown opening on mouse hover -->
+    <div class="hor-menu  ">
+      <ul class="nav navbar-nav">
+        <li class="">
+          <a href="{{ path('dashboard') }}"> Escritorio
+            <span class="arrow"></span>
+          </a>
+        </li>
+        <li class="menu-dropdown classic-menu-dropdown ">
+          <a href="javascript:;"> Clientes
+            <span class="arrow"></span>
+          </a>
+          <ul class="dropdown-menu pull-left">
+            <li class=" ">
+              <a href="{" class="nav-link  ">
+                <i class="icon-globe"></i> Gestión de Clientes
+              </a>
+            </li>
+            {#<li>
+              <a href="{{ path('service_reconfirmation_list') }}" class="nav-link  ">
+                <i class="icon-compass"></i> Service reconfirmation
+              </a>
+            </li>#}
+          </ul>
+        </li>
+        
+        <!-- PRICES -->
+        
+        <li class="menu-dropdown classic-menu-dropdown ">
+          <a href="javascript:;"> Operaciones
+            <span class="arrow"></span>
+          </a>
+          <ul class="dropdown-menu pull-left">
+            <li class=" ">
+              <a href="" class="nav-link  ">
+                <i class="icon-globe"></i> Gestión de Presupuestos
+              </a>
+            </li>
+            <li class=" ">
+              <a href="" class="nav-link  ">
+                <i class="icon-globe"></i> Gestión de Facturas
+              </a>
+            </li>
+          </ul>
+        </li>
+        {% if is_granted('ROLE_SUPER_ADMIN') %}
+        <li class="menu-dropdown classic-menu-dropdown ">
+          <a href="javascript:;"> Administración
+            <span class="arrow"></span>
+          </a>
+          <ul class="dropdown-menu pull-left">
+            <li class=" ">
+              <a href="{{ path('user_list') }}" class="nav-link ">
+                <i class="icon-bar-chart"></i> Gestión de Usuarios
+              </a>
+            </li>
+            <li class=" ">
+              <a href="{{ path('clientType_index') }}" class="nav-link ">
+                <i class="icon-bar-chart"></i> Tipos de cliente
+              </a>
+            </li>
+          </ul>
+        </li>
+        {% endif %}
+      </ul>
+    </div>
+    <!-- END MEGA MENU -->
+
+  </div>
+</div>
+<!-- END HEADER MENU -->

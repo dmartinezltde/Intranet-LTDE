@@ -1,0 +1,26 @@
+<div class="modal fade" id="{% if id is defined %}{{ id }}{% else %}modal-confirm{% endif %}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        {% if header is defined %}
+          {{ header }}
+        {% else %}
+          Action required
+        {% endif %}
+      </div>
+      <div class="modal-body">
+        {% if body is defined %}
+          {{ body }}
+        {% else %}
+          Are you sure?
+        {% endif %}
+      </div>
+      {% if noFooter is not defined or not noFooter %}
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+          <a class="btn btn-success btn-ok">Continue</a>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</div>

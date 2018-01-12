@@ -1,0 +1,234 @@
+{% if editable is defined and editable==true %}
+  {{ form_start(update_form) }}
+  {{ form_errors(update_form) }}
+  {{ form_widget(update_form._token) }}
+{% elseif create_new_row is defined and create_new_row==true %}
+  {{ form_start(new_form) }}
+  {{ form_errors(new_form) }}
+  {{ form_widget(new_form._token) }}
+{% endif %}
+
+{% if base_table_attribute_arguments is defined %}
+  {% for col in base_table_attribute_arguments|keys %}
+    {% for attr in base_table_attribute_arguments[col]|keys %}
+      {% set t = base_table_attribute_arguments[col] %}
+      {% if specificArguments[attr] is defined %}
+        {% set t = t|merge({(attr): specificArguments[attr]}) %}
+        {% set base_table_attribute_arguments = base_table_attribute_arguments|merge({(col) : t}) %}
+      {% endif %}
+    {% endfor %}
+  {% endfor %}
+{% else %}
+  {% set base_table_attribute_arguments = {} %}
+{% endif %}
+
+{% set current_main_row_index = 0 %}
+
+<div id="editable_table_{{ base_instance_class_name }}">
+  <table id="{{ datatable_id is defined ? datatable_id : "datatable_1"}}" class="table table-striped table-bordered table-hover order-column {%if table_classes is defined %} {{table_classes}} {%endif%}">
+    <thead>
+      <tr>
+        
+        {% if grouped_instances is defined and grouped_instances!=null %}
+          {% for group_col_name in grouped_instances_col %}
+            <th>{{ group_col_name|raw }}</th>
+          {% endfor %}
+        {% endif %}
+        
+        {% for column_key in columns|keys %}
+          {% if base_table_rowspan is not defined or column_key not in base_table_rowspan|keys %}
+        
+            <th style="vertical-align: top;" >
+              <div style="position: relative;">
+                {{ columns[column_key] }}
+              
+                {# Add the sortable icons #}
+              
+                {% if sortable_columns is defined and column_key in sortable_columns|keys %}
+                  <div style="position: absolute; top: 1px; right: 1px;">
+                    <a onclick="changeFormSortedColumnAction($('form'), '{{ sortable_columns[column_key] }}', 'asc');"><i class="fa fa-sort-up"></i></a>
+                  </div>
+                  <div style="position: absolute; top: 10px; right: 1px;">
+                    <a onclick="changeFormSortedColumnAction($('form'), '{{ sortable_columns[column_key] }}', 'desc');"><i class="fa fa-sort-down"></i></a>
+                  </div>
+                {% endif %}
+              
+                {% if editable is defined and editable==true and batch_editable_columns is defined and batch_editable_columns!=null and column_key in batch_editable_columns %}
+          
+                  <br/><a id="opener" onclick='replicate_value_on_column(prompt("Enter a Value", ""), "{{column_key}}");'>(Edit all)</a>
+                  {# <br/><a id="opener">(Edit all)</a> #}
+                {% endif %}
+              </div>
+            </th>
+            
+          {% else %}
+          
+            {% for inner_column in base_table_rowspan[column_key]|keys %}
+              <th>
+                {{ base_table_rowspan[column_key][inner_column] }}
+              </th>
+            {% endfor %}
+          
+          {% endif %}
+        {% endfor %}
+        
+        {% if actions==true or actions_header is defined %}
+          {% if actions_header is not defined %}
+            <th width="{% if actions_width is defined %}{{actions_width}}{%else%}100px{%endif%}">Acciones</th>
+          {% else %}
+            <td width="{% if actions_width is defined %}{{actions_width}}{%else%}100px{%endif%}">
+              <div class="actions">
+                {% if actions_header['modal'] is defined and actions_header['modal']==true %}
+                  <a href="{{ actions_header['url'] }}" class="dateSelector fancyModal btn blue">
+                {% else %}
+                  <a href="{{ actions_header['url'] }}" class="btn btn-circle btn-info">            
+                {% endif %}
+                <i class="fa fa-plus"></i> <span class="hidden-xs"> {{ actions_header["label"] }} </span>
+                </a>
+              </div>
+            </td>
+          {% endif %}
+        {% endif %}
+      </tr>
+    </thead>
+    
+    <tbody>
+    
+    {# EXPANDIBLE TABLE #}
+    
+    {% set classes = "" %}
+            
+    {% set expandible_colspan = columns|length %}
+    
+    {%if expandible_table is defined %}
+      {% set expandible_colspan = columns|length %}
+      {% if actions %}
+        {% set expandible_colspan = expandible_colspan + 1 %}
+      {% endif %}
+      {%if expandible_table==1%}
+        {% set classes = classes~" success " %}
+      {%else%}
+        {%if expandible_table==2%}
+          {% set classes = classes~" warning " %}
+        {%endif%}
+      {%endif%}
+    {%endif%}
+    {%if row_classes is defined %}
+      {% set classes = classes~" "~row_classes %}
+    {% endif %}
+    
+    {% if base_table_rowspan is defined %}
+      {% for expanded_column in base_table_rowspan %}
+        {% set expandible_colspan = expandible_colspan + expanded_column|length - 1 %}
+      {% endfor %}
+    {% endif %}
+    
+    
+    {# END EXPANDIBLE TABLE #}
+    
+    {% if instances|length > 0 %}
+    
+      {% set instance_rowspan=1 %}
+      {% set classes="" %}
+        
+      {# START GROUPED INSTANCES BLOCK #}
+        {% if grouped_instances is defined and grouped_instances!=null %}
+          {% include 'common/table/_editable_table_row_group.html.twig' with {'grouped_instances': grouped_instances,
+                                                                              'closed_row': true} %}
+      
+      {# START NON GROUPED INSTANCES BLOCK #}
+        {% else %}
+      
+          {% for i in instances %}
+          
+            {% set current_main_row_index = current_main_row_index + 1 %}
+          
+            {% if current_main_row_index%2 != 0 %}
+              {% set classes="odd_row"  %}
+            {% else %}
+              {% set classes = "non_odd_row" %}
+            {% endif %}
+          
+            {% set instance_rowspan=1 %}
+            {% if base_table_rowspan is defined %}
+              {% for base_table_rowspan_attribute in base_table_rowspan|keys %}
+                {% if base_table_rowspan_attribute in base_table_attribute_arguments|keys %}
+                  {% set attr_args = base_table_attribute_arguments[base_table_rowspan_attribute] %}
+                {% else %}
+                  {% set attr_args = {} %}
+                {% endif %}
+                {% set temp = attribute(i, base_table_rowspan_attribute, attr_args) %}
+                {% if temp|length > instance_rowspan %}
+                  {% set instance_rowspan = temp|length %}
+                {% endif %}
+              {% endfor %}
+            {% endif %}
+          
+            {% if highlighted_instances is defined and i in highlighted_instances %}
+              <tr class="{{ classes }}" style="font-weight: bold">
+            {% else %}
+              <tr class="{{ classes }}">
+            {% endif %} 
+            
+            {% include('common/table/_editable_table_row.html.twig') %}
+            
+            {# </tr> Now the tr is added inside the row because of inner instances #}
+            
+            {# EXPANDIBLE TABLE #}
+            {% if expandible_table is defined and expandible_table!=null %}
+            <tr>
+              <td colspan="{{ expandible_colspan }}">
+                {% if expandible_row_path is defined and expandible_row_path!=null %}
+                    {% if expandible_with_ajax is defined and expandible_with_ajax == true %}
+                        <a href="{{ path(expandible_url_name, {(expandible_row_key): i.id}) }}" class="updateList" data-preload="false">
+                                <i class="fa fa-caret-right"></i> Show/hide {{ expandible_with_ajax_name }}
+                        </a>
+                        <div id="expandibles_{{ i.id }}" class="expandibles">
+                            
+                        </div>
+                    {% else %}
+                        {{ render(controller(expandible_row_path, {(expandible_row_key): i.id})) }}
+                    {% endif %}
+                {% else %}
+                  Second level row
+                {% endif %}
+              </td>
+            </tr>
+            {% endif %}
+            {# END EXPANDIBLE TABLE #}
+            
+          {% endfor %}
+        {% endif %}
+      
+    {% else %}
+      <tr>
+        <td colspan="{{columns|length}}">
+          {% if instances_name is defined %}
+            No se han encontrado {{ instances_name }}. {# JAVI TO CHANGE MESSAGE HERE. Personalized message? #}
+          {% else %}
+            No items found.
+          {% endif %}
+        </td>
+      </tr>
+    {% endif %}
+        
+    {% if create_new_row %}
+      <tr class="success">
+        {% for column in columns|keys %}
+          <td>{{ form_row(new_form.children[column]) }}</td>
+        {% endfor %}
+        <td><button type="submit" id="submit" class="btn green">Create new {{ instance_name }}</button></td>
+        </tr>
+    {% endif %}
+
+    </tbody>
+  </table>
+</div>
+
+{% if instances|length > 0 %}
+  {% include 'common/modalConfirm.html.twig' with {
+        'id': 'modal-confirm',
+        'header': 'Confirm removal',
+        'body': 'You are about to delete the '~instance_name~'. '~(delete_warning_message is defined ? delete_warning_message : "")~' Are you sure?'
+  } %}
+{% endif %}

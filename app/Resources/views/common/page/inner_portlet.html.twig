@@ -1,0 +1,36 @@
+<div {% if portlet_id is defined %}id="{{ portlet_id }}"{% endif %} class="portlet box green {% if portlet_class is defined %}{{ portlet_class }}{% endif %}">
+  <div class="portlet-title">
+    <div class="caption"><i class="fa fa-calendar"></i>{{ title|raw }}</div>
+    <div class="actions">
+      {% for action in portlet_actions %}
+        {% if action['submit'] is defined and action['submit'] == true %}
+          <input type="submit" name="submit" value="{{action["label"]}}" class="btn btn-default btn-sm">
+        {% else %}
+          {% if action['modal'] is defined and action['modal']==true %}
+            <a href="{{ action['url'] }}" class="dateSelector fancyModal btn blue"></a>
+          {% else %}
+            <a href="{{ action['url'] }}" class="btn btn-default btn-sm">            
+          {% endif %}
+          <i class="fa fa-plus"></i> <span class="hidden-xs"> {{ action["label"] }} </span>
+          </a>
+        {% endif %}
+      {% endfor %}
+      {#
+      <a href="#" class="btn btn-default btn-sm saveAndCalendar"><i class="fa fa-calendar"></i> View Calendar</a>
+      {% endif %}
+      <a href="#" class="btn btn-default btn-sm saveAndDates"><i class="fa fa-edit"></i> Save service and edit dates</a>
+      #}
+    </div>
+  </div>
+  <div class="portlet-body">
+    <div class="row">
+      <div class="col-md-12">
+        {% for subcontent in content %}
+          <div>
+            {{ subcontent|raw }}
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>

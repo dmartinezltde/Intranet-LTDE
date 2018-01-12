@@ -1,0 +1,24 @@
+{% form_theme filterForm 'form/filterFields.html.twig' %}
+{{ form_start(filterForm, {'attr': {'class': 'form-horizontal'} }) }}
+
+ {{ form_errors(filterForm) }}
+
+<div class="form-body">
+
+  <div class="row">
+    
+    <div class="col-md-8">
+      {{ form_row(filterForm.searchBy) }}
+    </div>
+  
+    {{ form_row(filterForm._token) }}
+
+    <div class="form-actions col-md-4">
+      <input type="submit" class="btn green submitButton" value="Filter"/>
+    </div>
+
+  </div>
+
+</div>
+
+

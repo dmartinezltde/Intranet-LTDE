@@ -1,0 +1,35 @@
+{% set base_url_prefix = "clientType" %}
+{% set base_instance_name = "Tipo de cliente" %}
+{% set base_instances_name = "Tipos de cliente" %}
+{% set base_instance_class_name = "ClientType" %}
+{% set base_key_id = "id" %}
+{% set base_table_columns = {
+                                "name":         "Nombre",
+                                "color":        "Tipo"
+                            } %}
+{% set base_editable_columns = [] %}
+{% set base_batch_editable_columns = [] %}
+
+{% set src_javascripts = [
+  "/assets/global/plugins/bootstrap-timepicker/js/bootstrap-timepicker.min.js",
+  "/assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js"
+] %}
+
+{% set javascripts = [
+  "initDatepickers()"
+] %}
+
+{% set additional_css = [
+  "/assets/global/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css"
+] %}
+
+{% if instance is defined %}
+  {% set breadcrumb = {
+    'Inicio': path('dashboard'),
+    'Tipos de cliente': path('client_list')
+  } %}
+{% endif %}
+
+{% block content %}
+
+{% endblock %}

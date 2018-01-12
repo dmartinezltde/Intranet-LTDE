@@ -1,0 +1,11 @@
+<ul class="page-breadcrumb breadcrumb">
+  {% for text, link in links %}
+    <li>
+      <a href="{{ link }}">{{ text }}</a>
+      <i class="fa fa-chevron-right"></i>
+    </li>
+  {% endfor %}
+  <li>
+    <span>{{ active }}</span>
+  </li>
+</ul>

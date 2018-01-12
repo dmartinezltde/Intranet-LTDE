@@ -1,0 +1,25 @@
+  
+  {%if filter_form_fields is not defined %}
+    {% for form_field in filterForm %}
+      <div class="col-md-4">
+        {{ form_row(form_field) }}
+      </div>
+    {% endfor %}
+  {% else %}
+    {% for form_block in filter_form_fields|keys %}
+      {% set form_rows = filter_form_fields[form_block] %}
+        {% for form_row in form_rows %}
+          {% for form_field in form_row %}
+            {% if form_row|length == 1 %}
+              <div class="col-md-12">
+            {% elseif form_row|length == 2 %}
+              <div class="col-md-6">
+            {% elseif form_row|length  == 3 %}
+              <div class="col-md-4">
+            {% endif %}        
+            {{ form_row(filterForm.children[form_field]) }}
+            </div>
+          {% endfor %}
+        {% endfor %}
+    {% endfor %}
+  {% endif %}

@@ -1,0 +1,82 @@
+{% extends '::layout.html.twig' %}
+
+{% block title %}Intranet ESMA Login{% endblock %}
+
+{% block top_menu %}{% endblock %}
+
+{% block mega_menu %}{% endblock %}
+
+{% block content %}
+  {#
+  <div>
+    {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+      {{ 'layout.logged_in_as'|trans({'%username%': app.user.username}, 'FOSUserBundle') }} |
+      <a href="{{ path('fos_user_security_logout') }}">
+        {{ 'layout.logout'|trans({}, 'FOSUserBundle') }}
+      </a>
+    {% else %}
+      <a href="{{ path('fos_user_security_login') }}">{{ 'layout.login'|trans({}, 'FOSUserBundle') }}</a>
+    {% endif %}
+  </div>
+  #}
+
+  {% for type, messages in app.session.flashBag.all %}
+    {% for message in messages %}
+      <div class="{{ type }}">
+        {{ message|trans({}, 'FOSUserBundle') }}
+      </div>
+    {% endfor %}
+  {% endfor %}
+
+  <div>
+    <div class="portlet light">
+      <div class="portlet-title">
+        <div class="caption">
+          <i class="icon-lock font-dark"></i>
+          <span class="caption-subject font-dark sbold uppercase">Acceder a Intranet ESMA</span>
+        </div>
+      </div>
+
+      <div class="portlet-body form">
+
+        {% if error %}
+          <div class="alert alert-danger">
+            <strong>{{ error.messageKey|trans(error.messageData, 'security') }}</strong></div>
+        {% endif %}
+
+        <form class="form-horizontal" role="form" action="{{ path("fos_user_security_check") }}" method="post">
+          <div class="form-body">
+            <div class="form-group">
+              <label class="col-md-3 control-label" for="username">Usuario</label>
+              <div class="col-md-9">
+                <input type="text" class="form-control" placeholder="Inserte su usuario / email" id="username" name="_username" required="required" value="{{ last_username }}" />
+                <span class="help-block">Usuario o email</span>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="col-md-3 control-label" for="password">Contraseña</label>
+              <div class="col-md-9">
+                <input type="password" id="password" name="_password" required="required" class="form-control" placeholder="Inserte su contraseña" id="username" name="_username" required="required" value="{{ last_username }}" />
+              </div>
+            </div>
+
+            {#
+            <input type="checkbox" id="remember_me" name="_remember_me" value="on" />
+            <label for="remember_me">{{ 'security.login.remember_me'|trans }}</label>
+            #}
+
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
+            <div class="form-actions">
+              <div class="row">
+                <div class="col-md-offset-3 col-md-9">
+                  <button id="_submit" name="_submit" value="{{ 'security.login.submit'|trans }}" class="btn green">Acceder</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock %}
