@@ -116,31 +116,6 @@ class Staff
     private $emails;
 
     /**
-     * @var \AppBundle\Entity\Identity
-     *
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Identity")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="identity_id", referencedColumnName="id", unique=true)
-     * })
-     */
-    private $identity;
-
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     *
-     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\EconomicData")
-     * @ORM\JoinTable(name="staff_economic_data",
-     *   joinColumns={
-     *     @ORM\JoinColumn(name="staff_id", referencedColumnName="id", onDelete="CASCADE")
-     *   },
-     *   inverseJoinColumns={
-     *     @ORM\JoinColumn(name="economic_data_id", referencedColumnName="id", unique=true, nullable=false)
-     *   }
-     * )
-     */
-    private $economicDatas;
-
-    /**
      * Constructor
      */
     public function __construct()
@@ -148,7 +123,6 @@ class Staff
         $this->addresses = new \Doctrine\Common\Collections\ArrayCollection();
         $this->phones = new \Doctrine\Common\Collections\ArrayCollection();
         $this->emails = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->economicsDatas = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
