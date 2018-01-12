@@ -26,14 +26,63 @@
             <span class="arrow"></span>
           </a>
         </li>
-        <li class="menu-dropdown classic-menu-dropdown ">
-          <a href="javascript:;"> Clientes
+        <li class="menu-dropdown classic-menu-dropdown"
+            style="background-color: #f2b038;">
+          <a href="javascript:;"> <i class="fa fa-desktop"></i> Tienda
             <span class="arrow"></span>
           </a>
           <ul class="dropdown-menu pull-left">
             <li class=" ">
+              <a href="" class="nav-link  ">
+                TPV - Punto de venta
+              </a>
+            </li>
+            <li class=" ">
+              <a href="" class="nav-link  ">
+                Gestión Productos
+              </a>
+            </li>
+            <li class=" ">
+              <a href="" class="nav-link  ">
+                Gestión Ventas
+              </a>
+            </li>
+            <li class=" ">
+              <a href="" class="nav-link  ">
+                Gestión Garantías
+              </a>
+            </li>
+            <li class=" ">
+              <a href="" class="nav-link  ">
+                Gestión Pedidos a Central
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li class="menu-dropdown classic-menu-dropdown "
+          style="background-color: #fe4747;">
+          <a href="javascript:;"> <i class="icon-user"></i> CRM
+            <span class="arrow"></span>
+          </a>
+          <ul class="dropdown-menu pull-left">
+            <li class=" ">
+              <a href="" class="nav-link  ">
+                Gestión Clientes
+              </a>
+            </li>
+            <li class=" ">
               <a href="{" class="nav-link  ">
-                <i class="icon-globe"></i> Gestión de Clientes
+                Gestión Proveedores
+              </a>
+            </li>
+            <li class=" ">
+              <a href="{" class="nav-link  ">
+                Gestión Personal
+              </a>
+            </li>
+            <li class=" ">
+              <a href="{" class="nav-link  ">
+                Gestión Franquiciados
               </a>
             </li>
             {#<li>
@@ -44,39 +93,130 @@
           </ul>
         </li>
         
-        <!-- PRICES -->
+        <li class="menu-dropdown classic-menu-dropdown"
+            style="background-color: #38c4f2;">
+          <a href="javascript:;"> <i class="fa fa-archive"></i> Productos
+            <span class="arrow"></span>
+          </a>
+          <ul class="dropdown-menu pull-left">
+            <li class=" ">
+              <a href="{{ path('product_index') }}" class="nav-link  ">
+                Gestión de Productos
+              </a>
+            </li>
+            <li class=" ">
+              <a href="" class="nav-link  ">
+                Gestión de Almacenes
+              </a>
+            </li>
+            <li class=" ">
+              <a href="" class="nav-link  ">
+                Gestión de Tiendas
+              </a>
+            </li>
+          </ul>
+        </li>
         
-        <li class="menu-dropdown classic-menu-dropdown ">
-          <a href="javascript:;"> Operaciones
+        <li class="menu-dropdown classic-menu-dropdown "
+          style="background-color: #57d157;">
+          <a href="javascript:;"> <i class="fa fa-edit"></i> Operaciones
             <span class="arrow"></span>
           </a>
           <ul class="dropdown-menu pull-left">
             <li class=" ">
               <a href="" class="nav-link  ">
-                <i class="icon-globe"></i> Gestión de Presupuestos
+                Gestión de Presupuestos
               </a>
             </li>
             <li class=" ">
               <a href="" class="nav-link  ">
-                <i class="icon-globe"></i> Gestión de Facturas
+                Gestión de Facturas
+              </a>
+            </li>
+            <li class=" ">
+              <a href="" class="nav-link  ">
+                Gestión Pedidos Tiendas
+              </a>
+            </li>
+            <li class=" ">
+              <a href="" class="nav-link  ">
+                Gestión Pedidos a Proveedor
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li class="menu-dropdown classic-menu-dropdown"
+            style="background-color: #3882f2;">
+          <a href="javascript:;"> <i class="fa fa-file-o"></i> Informes
+            <span class="arrow"></span>
+          </a>
+          <ul class="dropdown-menu pull-left">
+            <li class=" ">
+              <a href="" class="nav-link  ">
+                Informe general
+              </a>
+            </li>
+            <li class=" ">
+              <a href="" class="nav-link  ">
+                Informe de ventas
+              </a>
+            </li>
+            <li class=" ">
+              <a href="" class="nav-link  ">
+                Informe de gastos
+              </a>
+            </li>
+            <li class=" ">
+              <a href="" class="nav-link  ">
+                Informes de personal
+              </a>
+            </li>
+            <li class=" ">
+              <a href="" class="nav-link  ">
+                Informes de franquicias
               </a>
             </li>
           </ul>
         </li>
         {% if is_granted('ROLE_SUPER_ADMIN') %}
         <li class="menu-dropdown classic-menu-dropdown ">
-          <a href="javascript:;"> Administración
+          <a href="javascript:;"> <i class="fa fa-cog"></i> Administración
             <span class="arrow"></span>
           </a>
           <ul class="dropdown-menu pull-left">
             <li class=" ">
               <a href="{{ path('user_list') }}" class="nav-link ">
-                <i class="icon-bar-chart"></i> Gestión de Usuarios
+                Gestión de Usuarios
               </a>
             </li>
             <li class=" ">
               <a href="" class="nav-link ">
-                <i class="icon-bar-chart"></i> Gestión interna
+                Gestión de Transportes
+              </a>
+            </li>
+            <li class=" ">
+              <a href="{{ path('central_index') }}" class="nav-link ">
+                Gestión de Oficina Central
+              </a>
+            </li>
+            <li class=" ">
+              <a href="" class="nav-link ">
+                Gestión de Tiendas
+              </a>
+            </li>
+            <li class=" ">
+              <a href="" class="nav-link ">
+                Gestión de Franquicias
+              </a>
+            </li>
+            <li class=" ">
+              <a href="" class="nav-link ">
+                Gestión de Gastos Fijos
+              </a>
+            </li>
+            <li class=" ">
+              <a href="" class="nav-link ">
+                Gestión de Ingresos Fijos
               </a>
             </li>
           </ul>

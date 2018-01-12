@@ -1021,7 +1021,7 @@ class IntranetController extends Controller {
         $this->addFlash('danger', 'There were some problems after deleting the entity.');
       }
 
-      $this->addFlash('success', 'The ' . $this->instance_name . ' was deleted.');
+      $this->addFlash('success', $this->instance_name . ' ha sido borrado.');
       
     } catch (\Exception $e) {
       $this->addFlash('danger', $e->getMessage());

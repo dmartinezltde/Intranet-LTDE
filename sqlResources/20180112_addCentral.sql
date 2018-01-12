@@ -1,0 +1,1 @@
+INSERT INTO central (name) VALUES ('Oficina Madrid, Alcalá');

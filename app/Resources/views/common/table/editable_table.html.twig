@@ -228,7 +228,7 @@
 {% if instances|length > 0 %}
   {% include 'common/modalConfirm.html.twig' with {
         'id': 'modal-confirm',
-        'header': 'Confirm removal',
-        'body': 'You are about to delete the '~instance_name~'. '~(delete_warning_message is defined ? delete_warning_message : "")~' Are you sure?'
+        'header': 'Confirmación de borrado',
+        'body': 'Está intentando borrar '~instance_name~'. '~(delete_warning_message is defined ? delete_warning_message : "")~' Está seguro?'
   } %}
 {% endif %}

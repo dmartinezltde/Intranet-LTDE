@@ -1,0 +1,54 @@
+{% extends 'layout.html.twig' %}
+
+{% block page_stylesheets %}
+  <!-- BEGIN PAGE LEVEL PLUGINS -->
+  <link href="{{ asset('assets/global/plugins/datatables/datatables.min.css') }}" rel="stylesheet" type="text/css" />
+  <link href="{{ asset('assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css') }}" rel="stylesheet" type="text/css" />
+  <link href="{{ asset('assets/global/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css') }}" rel="stylesheet" type="text/css" />
+  <link href="{{ asset('assets/global/plugins/fancybox/source/jquery.fancybox.css') }}" rel="stylesheet" type="text/css" />
+  <!-- END PAGE LEVEL PLUGINS -->
+{% endblock %}
+
+{% block page_head %}
+  {% include '_page_head.html.twig' with { 'page_head_title': 'Oficina Central', 'page_head_subtitle': 'Gestiona la oficina central de La Tienda del Espía' } %}
+{% endblock %}
+
+{% block content %}
+  {% include 'common/breadcrumb.html.twig' with { 'links': { 'Inicio': path('homepage') }, 'active': 'Oficina Central' } %}
+
+  <div class="page-content-inner">
+
+    {% include 'common/feedback.html.twig' %}
+    
+    <div class="row">
+      <div class="col-md-12">
+        <div class="portlet light ">
+          <div class="portlet-title">
+            <div class="caption font-dark">
+              <i class="icon-users font-dark"></i>
+              <span class="caption-subject bold uppercase"> Oficina Central LTDE</span>
+            </div>
+          </div>
+          <div class="portlet-body">
+            <strong>Oficina Central:</strong> {{ central.name }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block javascript_page_plugins %}
+  <!-- BEGIN PAGE LEVEL PLUGINS -->
+  <script src="{{ asset('assets/global/scripts/datatable.js') }}" type="text/javascript"></script>
+  <script src="{{ asset('assets/global/plugins/datatables/datatables.min.js') }}" type="text/javascript"></script>
+  <script src="{{ asset('assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js') }}" type="text/javascript"></script>
+  <!-- END PAGE LEVEL PLUGINS -->
+{% endblock %}
+
+{% block page_scripts %}
+  <!-- BEGIN PAGE LEVEL SCRIPTS -->
+  <script src="{{ asset('assets/js/datatables-managed.js') }}" type="text/javascript"></script>
+  <script src="{{ asset('assets/js/generic.js') }}" type="text/javascript"></script>
+  <!-- END PAGE LEVEL SCRIPTS -->
+{% endblock %}
