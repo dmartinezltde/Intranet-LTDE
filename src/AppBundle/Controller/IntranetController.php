@@ -724,7 +724,7 @@ class IntranetController extends Controller {
 
     if ($form->isSubmitted() && $form->isValid()) {
       if ($this->checkValid($form, $instance)) {
-        $this->makeCommunication($instance);
+        //$this->makeCommunication($instance);
         $em->persist($instance);
         try {
           $em->flush();

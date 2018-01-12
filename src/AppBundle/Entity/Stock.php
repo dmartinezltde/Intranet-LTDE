@@ -34,7 +34,20 @@ class Stock
      * @ORM\Column(name="min_quantity", type="integer", nullable=false, unique=false)
      */
     private $minQuantity;
-
+    
+    /**
+     * @var \AppBundle\Entity\Product
+     *
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Product", mappedBy="stock")
+     */
+    private $product;
+    
+    /**
+     * @var \AppBundle\Entity\Shop
+     *
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Shop", mappedBy="stock")
+     */
+    private $shop;
 
     /**
      * Get id
@@ -92,6 +105,28 @@ class Stock
     public function getMinQuantity()
     {
         return $this->minQuantity;
+    }
+    
+    public function setProduct(\AppBundle\Entity\Product $product)
+    {
+        $this->product = $product;
+        
+        return $this;
+    }
+    
+    public function getProduct() {
+        return $this->product;
+    }
+    
+    public function setShop(\AppBundle\Entity\Shop $shop)
+    {
+        $this->shop = $shop;
+        
+        return $this;
+    }
+    
+    public function getShop() {
+        return $this->shop;
     }
 }
 

@@ -3,6 +3,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Controller\IntranetController;
 use AppBundle\Entity\Product;
+use AppBundle\Entity\Stock;
 use AppBundle\Form\ProductType;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -30,6 +31,22 @@ class ProductController extends IntranetController {
    */
   public function indexAction(Request $request, $arguments = null) {
     return parent::_indexAction($request, $arguments);
+  }
+  
+  public function _initialize(Request $request, $instance, $form, $arguments) {
+    if($form != NULL && $form->isSubmitted() && $form->isValid()) {
+      if($instance->getStock() == NULL) {
+        $stock = new Stock();
+        $stock->setQuantity(0);
+        $stock->setMinQuantity(0);
+        
+        $this->getDoctrine()->getManager()->persist($stock);
+        
+        $instance->setStock($stock);
+      }
+    }
+    
+    return parent::_initialize($request, $instance, $form, $arguments);
   }
   
   /**
