@@ -38,7 +38,8 @@ class Stock
     /**
      * @var \AppBundle\Entity\Product
      *
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Product", mappedBy="stock")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Product", inversedBy="stocks")
+     * @ORM\JoinColumn(name="product_id", referencedColumnName="id")
      */
     private $product;
     

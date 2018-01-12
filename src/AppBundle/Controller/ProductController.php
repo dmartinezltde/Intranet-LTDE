@@ -36,13 +36,17 @@ class ProductController extends IntranetController {
   public function _initialize(Request $request, $instance, $form, $arguments) {
     if($form != NULL && $form->isSubmitted() && $form->isValid()) {
       if($instance->getStock() == NULL) {
-        $stock = new Stock();
-        $stock->setQuantity(0);
-        $stock->setMinQuantity(0);
-        
-        $this->getDoctrine()->getManager()->persist($stock);
-        
-        $instance->setStock($stock);
+        $em = $this->getDoctrine()->getManager();
+        $shops = $em->getRepository('AppBundle:Shop');
+        foreach($shops as $shop) {
+          $stock = new Stock();
+          $stock->setQuantity(0);
+          $stock->setMinQuantity(0);
+          
+          $this->getDoctrine()->getManager()->persist($stock);
+          
+          $instance->setStock($stock);
+        }
       }
     }
     
