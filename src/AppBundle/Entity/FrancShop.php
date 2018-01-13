@@ -13,27 +13,6 @@ use AppBundle\Entity\Shop;
  */
 class FrancShop extends Shop
 {
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    private $id;
-
-    public function __construct() {
-        $this->shopType = Shop::FRANCSHOP;
-    }
-
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
+    
 }
 

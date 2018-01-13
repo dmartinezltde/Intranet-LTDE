@@ -1,0 +1,35 @@
+{% set base_url_prefix = "shop" %}
+{% set base_instance_name = "Tienda franquiciada" %}
+{% set base_instances_name = "Tiendas franquiciadas" %}
+{% set base_instance_class_name = "FrancShop" %}
+{% set base_key_id = "id" %}
+{% set base_table_columns = {
+                                "name":         "Nombre",
+                                "shopTypeTxt":  "Tipo de Tienda"
+                            } %}
+{% set base_editable_columns = [] %}
+{% set base_batch_editable_columns = [] %}
+
+{% set src_javascripts = [
+  "/assets/global/plugins/bootstrap-timepicker/js/bootstrap-timepicker.min.js",
+  "/assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js"
+] %}
+
+{% set javascripts = [
+  "initDatepickers()"
+] %}
+
+{% set additional_css = [
+  "/assets/global/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css"
+] %}
+
+{% if instance is defined %}
+  {% set breadcrumb = {
+    'Inicio': path('dashboard'),
+    'Tiendas': path('shop_list')
+  } %}
+{% endif %}
+
+{% block content %}
+
+{% endblock %}

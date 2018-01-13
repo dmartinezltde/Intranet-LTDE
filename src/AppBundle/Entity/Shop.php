@@ -9,7 +9,8 @@ use Doctrine\Common\Collections\ArrayCollection;
  * Shop
  *
  * @ORM\Table(name="shop")
- * @ORM\Entity
+ * @ORM\InheritanceType("JOINED")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\IntranetRepository")
  */
 class Shop
 {
@@ -20,28 +21,28 @@ class Shop
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=100, precision=0, scale=0, nullable=false, unique=true)
      */
-    private $name;
+    protected $name;
     
     /**
      * @var integer
      *
      * @ORM\Column(name="shop_type", type="smallint")
      */
-    private $shopType;
+    protected $shopType;
 
     /**
      * @var \AppBundle\Entity\Stock
      *
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\Stock", mappedBy="shop")
      */
-    private $stocks;
+    protected $stocks;
     
     const OWNSHOP = 1;
     const FRANCSHOP = 2;
@@ -108,6 +109,17 @@ class Shop
         $this->shopType = $shopType;
         
         return $this;
+    }
+    
+    public function getShopTypeTxt() {
+        switch($this->shopType) {
+            case self::OWNSHOP:
+                return 'Tienda propia';
+            case self::FRANCSHOP:
+                return 'Tienda Franquiciada';
+            default:
+                return 'No tiene tipo especificado';
+        }
     }
 }
 

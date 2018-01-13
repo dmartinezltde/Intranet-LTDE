@@ -636,8 +636,13 @@ class IntranetController extends Controller {
     return true;
   }
   
-  protected function _getDefaultEditFormAction($id){
-    return $this->generateUrl($this->url_prefix.'_edit', array("id"=>$id));
+  protected function _getDefaultEditFormAction(Request $request, $id, $getOptions = null){
+    if($getOptions == null) {
+      return $this->generateUrl($this->url_prefix.'_edit', array("id"=>$id));
+    } else {
+      return $this->generateUrl($this->url_prefix.'_edit', array("id"=>$id))
+      . '?' . $getOptions['variable'] . '=' . $getOptions['value'];
+    }
   }
 
   /**
@@ -685,7 +690,7 @@ class IntranetController extends Controller {
     }
     
     // Fill the form with custom options
-    $form_action = $this->_getDefaultEditFormAction($id);
+    $form_action = $this->_getDefaultEditFormAction($request, $id);
     if ($form_action) {
       $arguments["form_options"]["action"] = $form_action;
     }

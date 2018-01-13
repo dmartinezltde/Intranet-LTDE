@@ -206,12 +206,14 @@
               </a>
               <ul class="dropdown-menu">
                 <li class=" ">
-                  <a href="" class="nav-link ">
+                  <a href="{{ path('shop_index') }}?shopType={{
+                  constant('AppBundle\\Entity\\Shop::OWNSHOP') }}" class="nav-link ">
                     Tiendas Propias
                   </a>
                 </li>
                 <li class=" ">
-                  <a href="" class="nav-link ">
+                  <a href="{{ path('shop_index') }}?shopType={{
+                  constant('AppBundle\\Entity\\Shop::FRANCSHOP') }}" class="nav-link ">
                     Tiendas Franquiciadas
                   </a>
                 </li>
