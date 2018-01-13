@@ -35,21 +35,23 @@ class ProductController extends IntranetController {
   
   public function _initialize(Request $request, $instance, $form, $arguments) {
     if($form != NULL && $form->isSubmitted() && $form->isValid()) {
-      if($instance->getStock() == NULL) {
+      if($instance->getId() == NULL) {
         $em = $this->getDoctrine()->getManager();
-        $shops = $em->getRepository('AppBundle:Shop');
+        $shops = $em->getRepository('AppBundle:Shop')->findAll();
         foreach($shops as $shop) {
           $stock = new Stock();
           $stock->setQuantity(0);
           $stock->setMinQuantity(0);
+          $stock->setProduct($instance);
+          $stock->setShop($shop);
           
           $this->getDoctrine()->getManager()->persist($stock);
           
-          $instance->setStock($stock);
+          $instance->addStock($stock);
         }
       }
+      
     }
-    
     return parent::_initialize($request, $instance, $form, $arguments);
   }
   

@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Shop
@@ -31,12 +32,13 @@ class Shop
     /**
      * @var \AppBundle\Entity\Stock
      *
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Stock", inversedBy="shop")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="stock_id", referencedColumnName="id", unique=true)
-     * })
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Stock", mappedBy="shop")
      */
-    private $stock;
+    private $stocks;
+    
+    public function __construct() {
+        $this->stocks = new ArrayCollection;
+    }
 
     /**
      * Get id
@@ -72,26 +74,18 @@ class Shop
         return $this->name;
     }
 
-    /**
-     * Set stock
-     *
-     * @param \AppBundle\Entity\Stock $stock
-     *
-     * @return Shop
-     */
-    public function setStock(\AppBundle\Entity\Stock $stock = null)
+    public function addStock(\AppBundle\Entity\Stock $stock = null)
     {
-        $this->stock = $stock;
+        $this->stocks[] = $stock;
 
         return $this;
     }
-
-    /**
-     * Get stock
-     *
-     * @return \AppBundle\Entity\Stock
-     */
-    public function getStock()
+    
+    public function removeStock(\AppBundle\Entitu\Stock $stock) {
+        $this->stocks->removeElement($stock);
+    }
+    
+    public function getStocks()
     {
         return $this->stock;
     }
