@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use AppBundle\Entity\Shop;
 
 /**
  * FrancShop
@@ -10,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="franc_shop")
  * @ORM\Entity
  */
-class FrancShop
+class FrancShop extends Shop
 {
     /**
      * @var integer
@@ -21,6 +22,9 @@ class FrancShop
      */
     private $id;
 
+    public function __construct() {
+        $this->shopType = Shop::FRANCSHOP;
+    }
 
     /**
      * Get id

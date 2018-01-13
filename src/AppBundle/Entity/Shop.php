@@ -28,6 +28,13 @@ class Shop
      * @ORM\Column(name="name", type="string", length=100, precision=0, scale=0, nullable=false, unique=true)
      */
     private $name;
+    
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="shop_type", type="smallint")
+     */
+    private $shopType;
 
     /**
      * @var \AppBundle\Entity\Stock
@@ -35,6 +42,9 @@ class Shop
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\Stock", mappedBy="shop")
      */
     private $stocks;
+    
+    const OWNSHOP = 1;
+    const FRANCSHOP = 2;
     
     public function __construct() {
         $this->stocks = new ArrayCollection;
@@ -88,6 +98,16 @@ class Shop
     public function getStocks()
     {
         return $this->stock;
+    }
+    
+    public function getShopType() {
+        return $this->shopType;
+    }
+    
+    public function setShopType($shopType) {
+        $this->shopType = $shopType;
+        
+        return $this;
     }
 }
 
