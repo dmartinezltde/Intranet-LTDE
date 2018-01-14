@@ -10,23 +10,8 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="central")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\IntranetRepository")
  */
-class Central
+class Central extends Workplace
 {
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    private $id;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="name", type="string", length=255, nullable=false, unique=true)
-     */
-    private $name;
 
     /**
      * @var \AppBundle\Entity\Address

@@ -114,6 +114,15 @@ class Staff
      * )
      */
     private $emails;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Workplace", inversedBy="staff")
+     * @ORM\JoinColumn(name="workplace_id", referencedColumnName="id")
+     */
+    private $workplace;
+    
+    const WORKPLACE_SHOP = 1;
+    const WORKPLACE_OFFICE = 2;
 
     /**
      * Constructor
@@ -404,63 +413,15 @@ class Staff
     {
         return $this->emails;
     }
-
-    /**
-     * Set identity
-     *
-     * @param \AppBundle\Entity\Identity $identity
-     *
-     * @return Staff
-     */
-    public function setIdentity(\AppBundle\Entity\Identity $identity = null)
-    {
-        $this->identity = $identity;
-
+    
+    public function setWorkplace(\AppBundle\Entity\Workplace $workplace) {
+        $this->workplace = $workplace;
+        
         return $this;
     }
-
-    /**
-     * Get identity
-     *
-     * @return \AppBundle\Entity\Identity
-     */
-    public function getIdentity()
-    {
-        return $this->identity;
-    }
-
-    /**
-     * Add economicData
-     *
-     * @param \AppBundle\Entity\EconomicData $economicData
-     *
-     * @return Staff
-     */
-    public function addEconomicData(\AppBundle\Entity\EconomicData $economicData)
-    {
-        $this->economicDatas[] = $economicData;
-
-        return $this;
-    }
-
-    /**
-     * Remove economicData
-     *
-     * @param \AppBundle\Entity\EconomicData $economicData
-     */
-    public function removeEconomicData(\AppBundle\Entity\EconomicData $economicData)
-    {
-        $this->economicDatas->removeElement($economicData);
-    }
-
-    /**
-     * Get economicDatas
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getEconomicDatas()
-    {
-        return $this->economicDatas;
+    
+    public function getWorkplace() {
+        return $this->workplace;
     }
 }
 
